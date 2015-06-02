@@ -4,10 +4,10 @@
     <color name="gwYellowDark">#FFa000</color>
     <color name="white">#FFFFFF</color>
 
-    <style name="ActionBarTheme" parent="@style/Theme.AppCompat.Light">
+    <style name="ActionBarTheme" parent="@style/Theme.AppCompat.NoActionBar">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="actionBarStyle">@style/MyActionBar</item>
-
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
