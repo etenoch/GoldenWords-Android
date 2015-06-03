@@ -10,11 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,22 +51,17 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
-
         mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
-
         mAdapter = new MyAdapter(TITLES,ICONS,NAME,EMAIL);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
         // And passing the titles,icons,header view name, header view email,
         // and header view profile picture
 
         mRecyclerView.setAdapter(mAdapter);                              // Setting the adapter to RecyclerView
-
         mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
-
         mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
 
         Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
         mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar,R.string.openDrawer,R.string.closeDrawer){
-
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -83,13 +73,11 @@ public class MainActivity extends AppCompatActivity {
                 super.onDrawerClosed(drawerView);
                 // Code here will execute once drawer is closed
             }
-
         }; // Drawer Toggle Object Made
         Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
         mDrawerToggle.syncState();               // Finally
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
