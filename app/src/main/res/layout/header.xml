@@ -1,44 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="178dp"
+    android:layout_height="174dp"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="@drawable/ic_queens_background_small">
 
-
-
+    <ImageView
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:src="@mipmap/ic_goldenwords_blimp"
+        android:layout_above="@+id/linearLayout"
+        android:layout_marginLeft="16dp" />
+    
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="48dp"
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout">
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:textColor="#000"
-            android:text=""
-            android:textSize="14sp"
+            android:textColor="#fff"
+            android:text="@string/goldenwords"
+            android:textSize="38sp"
             android:textStyle="bold"
+            style="@style/TextShadow"/>
 
-            />
-
-        <TextView
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="5dp"
-            android:text=""
-            android:textSize="14sp"
-            android:textStyle="normal"
-
-            />
     </LinearLayout>
 
 </RelativeLayout>
