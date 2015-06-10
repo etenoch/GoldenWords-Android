@@ -2,13 +2,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
     <color name="gwYellow">#FFc107</color>
     <color name="gwYellowDark">#e69000</color>
-    <color name="gwYellowTransparent">#33333333</color>
+    <color name="gwYellowTransparent">#22666666</color>
     <color name="white">#FFFFFF</color>
 
     <style name="ActionBarTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="colorPrimaryDark">@color/gwYellowDark</item>
     </style>
-
 
 </resources>

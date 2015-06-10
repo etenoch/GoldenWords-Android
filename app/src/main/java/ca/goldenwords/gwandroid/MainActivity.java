@@ -14,8 +14,6 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    String TITLES[] = {"Current Issue","Editorials","News","Random","Pictures","Videos","Issue Archive","About Golden Words","Contact Us"};
-
     private Toolbar toolbar;
 
     RecyclerView mRecyclerView;
@@ -39,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new DrawerAdapter(TITLES);
+        mAdapter = new DrawerAdapter(getApplication().getResources().getStringArray(R.array.section_codes));
 
         mRecyclerView.setAdapter(mAdapter);
         mLayoutManager = new LinearLayoutManager(this);

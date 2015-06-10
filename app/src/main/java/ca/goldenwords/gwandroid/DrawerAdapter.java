@@ -1,7 +1,9 @@
 package ca.goldenwords.gwandroid;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +20,14 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
     // Creating a ViewHolder which extends the RecyclerView View Holder
     // ViewHolder are used to to store the inflated views in order to recycle them
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         int Holderid;
 
         TextView textView;
 
         public ViewHolder(View itemView,int ViewType) {
             super(itemView);
-
+            itemView.setOnClickListener(this);
             // Here we set the appropriate view in accordance with the the view type as passed when the holder object is created
             if(ViewType == TYPE_ITEM) {
                 textView = (TextView) itemView.findViewById(R.id.rowText);
@@ -33,10 +35,15 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             }
         }
 
+        @Override
+        public void onClick(View view) {
+            Log.d("DrawerAdapter", "onClick " + getAdapterPosition()+ " "+ view.findViewById(R.id.rowText).getTag() );
+        }
+
     }
 
-    DrawerAdapter(String Titles[]){
-        mNavTitles = Titles;
+    public DrawerAdapter(String titles[]){
+        mNavTitles = titles;
 
     }
 
@@ -64,7 +71,15 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     public void onBindViewHolder(DrawerAdapter.ViewHolder holder, int position) {
         if(holder.Holderid ==1) {                              // as the list view is going to be called after the header view so we decrement the
             // position by 1 and pass it to the holder while setting the text and image
-            holder.textView.setText(mNavTitles[position - 1]); // Setting the Text with the array of our Titles
+            try{
+                int id = R.string.class.getField(mNavTitles[position - 1]).getInt(null);
+                holder.textView.setText(id); // Setting the Text with the array of our Titles
+                holder.textView.setTag(mNavTitles[position - 1]);
+            }catch(NoSuchFieldException ex){
+                ex.printStackTrace();
+            }catch(IllegalAccessException ex){
+                ex.printStackTrace();
+            }
         }
 
     }

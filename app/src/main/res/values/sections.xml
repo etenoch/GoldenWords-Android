@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="section_codes">
+        <item>current</item>
+        <item>editorials</item>
+        <item>news</item>
+        <item>random</item>
+        <item>pictures</item>
+        <item>videos</item>
+        <item>archive</item>
+        <item>about</item>
+        <item>contact</item>
+    </string-array>
+
+
+    <string name="current">Current Issue</string>
+
+    <string name="editorials">Editorials</string>
+    <string name="news">News</string>
+    <string name="random">Random</string>
+    <string name="pictures">Pictures</string>
+    <string name="videos">Videos</string>
+
+    <string name="archive">Issue Archive</string>
+    <string name="about">About Golden Words</string>
+    <string name="contact">Contact Us</string>
+
+</resources>
