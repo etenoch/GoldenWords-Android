@@ -1,6 +1,8 @@
 package ca.goldenwords.gwandroid;
 
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -58,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
         };
         Drawer.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
+
+
+        Fragment newFragment = new MainActivityFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.fragment_container, newFragment).commit();
 
     }
 
