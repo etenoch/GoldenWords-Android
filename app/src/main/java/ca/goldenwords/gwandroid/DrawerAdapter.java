@@ -27,9 +27,9 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
         public ViewHolder(View itemView,int ViewType) {
             super(itemView);
-            itemView.setOnClickListener(this);
             // Here we set the appropriate view in accordance with the the view type as passed when the holder object is created
             if(ViewType == TYPE_ITEM) {
+                itemView.setOnClickListener(this);
                 textView = (TextView) itemView.findViewById(R.id.rowText);
                 Holderid = 1;
             }
