@@ -2,8 +2,6 @@ package ca.goldenwords.gwandroid.controller;
 
 
 import android.os.AsyncTask;
-
-import ca.goldenwords.gwandroid.MessageEvent;
 import ca.goldenwords.gwandroid.model.Issue;
 import de.greenrobot.event.EventBus;
 
@@ -14,13 +12,13 @@ public class CurrentIssueFetcher extends AsyncTask<String, Void, String> {
     }
 
     @Override protected String doInBackground(String... params) {
-
-        return "";
+        // do http request to api here
+        return "current issue text";
     }
 
     @Override protected void onPostExecute(String result) {
         // parse json and make Issue object
-        EventBus.getDefault().post(new Issue());
+        EventBus.getDefault().post(new Issue(result));
     }
 
 }

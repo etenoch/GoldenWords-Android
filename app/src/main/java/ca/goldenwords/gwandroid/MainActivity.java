@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import ca.goldenwords.gwandroid.view.CurrentIssueFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerToggle.syncState();
 
 
-        Fragment newFragment = new MainActivityFragment();
+        Fragment newFragment = new CurrentIssueFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.fragment_container, newFragment).commit();
 
