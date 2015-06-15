@@ -6,10 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import ca.goldenwords.gwandroid.R;
-import ca.goldenwords.gwandroid.controller.CurrentIssueFetcher;
+import ca.goldenwords.gwandroid.controller.IssueFetcher;
 import ca.goldenwords.gwandroid.model.Issue;
 import de.greenrobot.event.EventBus;
 
@@ -21,7 +20,7 @@ public class CurrentIssueFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_current_issue, container, false);
-        new CurrentIssueFetcher().execute();
+        new IssueFetcher("http://goldenwords.ca/api/get/issue/49/25").execute();
         return v;
     }
 

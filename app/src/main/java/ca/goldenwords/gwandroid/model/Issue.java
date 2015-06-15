@@ -11,4 +11,9 @@ public class Issue {
     public String getData(){
         return temp;
     }
+
+
+    public static Issue fromJson(String json){
+        return new Issue(json);
+    }
 }
