@@ -3,6 +3,7 @@ package ca.goldenwords.gwandroid;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -49,18 +50,24 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             DrawerLayout dl = (DrawerLayout) host.findViewById(R.id.DrawerLayout);
             dl.closeDrawers();
 
-
             Object section = view.findViewById(R.id.rowText).getTag();
             Fragment fragment=null;
             if(section.toString().equals("current"))
                 fragment = new CurrentIssueFragment();
 
-            if(fragment != null){
-                FragmentActivity activity = (FragmentActivity)view.getContext();
-                FragmentManager manager = activity.getSupportFragmentManager();
 
-                FragmentTransaction ft = manager.beginTransaction();
-                ft.replace(R.id.fragment_container, fragment).commit();
+            if(fragment != null){
+                final Fragment nextFragment = fragment;
+                final FragmentActivity activity = (FragmentActivity)view.getContext();
+                final FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+
+                Runnable r = new Runnable() {
+                    public void run() {
+                        ft.replace(R.id.fragment_container, nextFragment).commit();
+                    }
+                };
+                new Handler().postDelayed(r, 80); // run on new thread with a slight delay to avoid animation stutters
+
             }
 
         }
