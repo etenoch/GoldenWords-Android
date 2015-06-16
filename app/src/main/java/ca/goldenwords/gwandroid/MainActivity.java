@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT >=21)
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
@@ -49,24 +48,17 @@ public class MainActivity extends AppCompatActivity {
 
         Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar,R.string.openDrawer,R.string.closeDrawer){
-            @Override
-            public void onDrawerOpened(View drawerView) {
+            @Override public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
 
             }
-            @Override
-            public void onDrawerClosed(View drawerView) {
+            @Override public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
 
             }
         };
         Drawer.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
-
-
-        Fragment newFragment = new CurrentIssueFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.fragment_container, newFragment).commit();
 
     }
 

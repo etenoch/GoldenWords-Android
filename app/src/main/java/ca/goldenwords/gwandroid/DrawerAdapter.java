@@ -1,7 +1,13 @@
 package ca.goldenwords.gwandroid;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import ca.goldenwords.gwandroid.view.CurrentIssueFragment;
 
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder> {
 
@@ -37,7 +45,24 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
         @Override
         public void onClick(View view) {
-            Log.d("DrawerAdapter", "onClick " + getAdapterPosition()+ " "+ view.findViewById(R.id.rowText).getTag() );
+            final Activity host = (Activity) view.getContext();
+            DrawerLayout dl = (DrawerLayout) host.findViewById(R.id.DrawerLayout);
+            dl.closeDrawers();
+
+
+            Object section = view.findViewById(R.id.rowText).getTag();
+            Fragment fragment=null;
+            if(section.toString().equals("current"))
+                fragment = new CurrentIssueFragment();
+
+            if(fragment != null){
+                FragmentActivity activity = (FragmentActivity)view.getContext();
+                FragmentManager manager = activity.getSupportFragmentManager();
+
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.fragment_container, fragment).commit();
+            }
+
         }
 
     }

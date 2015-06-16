@@ -58,18 +58,13 @@ public abstract class AsyncTaskFetcher extends AsyncTask<String, Void, String> {
         params.put(key,value);
     }
 
-
     @Override protected void onPreExecute() {
-        try{
-            url = new URL(stringUrl+"?"+paramsToString());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
 
     @Override protected String doInBackground(String... params) {
         String response="";
         try{
+            url = new URL(stringUrl+"?"+paramsToString());
             conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000);
             conn.setConnectTimeout(15000);
