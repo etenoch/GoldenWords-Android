@@ -1,6 +1,8 @@
 package ca.goldenwords.gwandroid.controller;
 
 
+import org.json.JSONException;
+
 import ca.goldenwords.gwandroid.model.Issue;
 import de.greenrobot.event.EventBus;
 
@@ -16,9 +18,13 @@ public class IssueFetcher extends AsyncTaskFetcher {
     }
 
     @Override protected void onPostExecute(String result) {
-        Issue issue = Issue.fromJson(result);
-
-        EventBus.getDefault().post(issue);
+        try{
+            Issue issue = Issue.fromJson(result);
+            EventBus.getDefault().post(issue);
+        }catch(JSONException e){
+            e.printStackTrace();
+            // TODO don't be a lazy fuck and handle this error
+        }
     }
 
 }

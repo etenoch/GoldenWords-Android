@@ -37,7 +37,9 @@ public class CurrentIssueFragment extends Fragment {
     }
 
     public void onEvent(Issue currentIssue){
-        setText(currentIssue.getData());
+        String title = currentIssue.nodes.iterator().next().title;
+
+        setText(title);
     }
 
     public void setText(String text){
