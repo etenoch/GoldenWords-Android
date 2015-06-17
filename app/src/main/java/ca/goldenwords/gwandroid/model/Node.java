@@ -25,7 +25,7 @@ public class Node {
     public String article_category;
     public String author; // field_by
 
-    public String htmlContent;
+    public String html_content;
     public String disqusIdentifier;
 
     public int cover_image;
@@ -44,10 +44,12 @@ public class Node {
         node.title = jo.getString("title");
         node.created = jo.getInt("created");
         node.revision = jo.getInt("revision_timestamp");
+        node.article_category = jo.getJSONObject("article_category").getString("name");
+        node.author = jo.getString("author");
 
         node.image_url = jo.getString("image_url");
         node.video_url = jo.getString("video_url");
-        node.htmlContent = jo.getString("html_content");
+        node.html_content = jo.getString("html_content");
         node.issue = jo.getString("issue");
         node.volume = jo.getString("volume");
         node.cover_image = jo.getInt("cover_image");

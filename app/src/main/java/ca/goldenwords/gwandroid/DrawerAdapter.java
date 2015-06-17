@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import ca.goldenwords.gwandroid.view.ArticleListFragment;
 import ca.goldenwords.gwandroid.view.CurrentIssueFragment;
 
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder> {
@@ -54,6 +55,8 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             Fragment fragment=null;
             if(section.toString().equals("current"))
                 fragment = new CurrentIssueFragment();
+            else if(section.toString().equals("news"))
+                fragment = new ArticleListFragment();
 
 
             if(fragment != null){

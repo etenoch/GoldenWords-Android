@@ -26,7 +26,6 @@ public class Issue {
         issue.jsonString = jsonString;
 
         JSONObject obj = new JSONObject(jsonString);
-        Node newNode;
         issue.nodes = new HashSet<>();
 
         Iterator<?> keys = obj.keys();
