@@ -1,5 +1,7 @@
 package ca.goldenwords.gwandroid;
 
+import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -59,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
         };
         Drawer.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
+
+        Fragment nextFragment = new CurrentIssueFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_container, nextFragment).commit();
 
     }
 
