@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:padding="2dp"
+        android:padding="4dp"
         android:background="#444444"
         android:textColor="#dddddd"
         android:gravity="center"
@@ -25,7 +25,10 @@
         android:paddingRight="0dp"
         android:paddingBottom="0dp"
         android:paddingTop="0dp"
-        android:layout_below="@+id/volume_issue_header">
+        android:layout_below="@+id/volume_issue_header"
+        android:background="#eeeeee"
+        android:cacheColorHint="#666666"
+        android:visibility="invisible">
 
     </android.support.v7.widget.RecyclerView>
 

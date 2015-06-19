@@ -3,6 +3,7 @@ package ca.goldenwords.gwandroid;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -55,8 +56,12 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             Fragment fragment=null;
             if(section.toString().equals("current"))
                 fragment = new CurrentIssueFragment();
-            else if(section.toString().equals("news"))
+            else if(section.toString().equals("news")||section.toString().equals("editorials")||section.toString().equals("random")){
                 fragment = new ArticleListFragment();
+                Bundle args = new Bundle();
+                args.putString("section", section.toString());
+                fragment.setArguments(args);
+            }
 
 
             if(fragment != null){

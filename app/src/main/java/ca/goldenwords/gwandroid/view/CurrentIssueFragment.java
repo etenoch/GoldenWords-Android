@@ -33,6 +33,7 @@ public class CurrentIssueFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_current_issue, container, false);
         fragmentView = v;
+
         new IssueFetcher("http://goldenwords.ca/api/get/issue/49/25").execute();
         return v;
     }
@@ -57,7 +58,6 @@ public class CurrentIssueFragment extends Fragment {
 
         RecyclerView recList = (RecyclerView) fragmentView.findViewById(R.id.cards_list);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
         List<Node> nodes = new ArrayList<>();
@@ -66,9 +66,11 @@ public class CurrentIssueFragment extends Fragment {
 
         // sort HashMap into List for adapting
         for (Node s : currentIssue.nodes) {
-            nodes.add(s);
+            if(s.cover_image==1) nodes.add(0, s);
+            else nodes.add(s);
         }
 
+        recList.setVisibility(View.VISIBLE);
         recList.setAdapter(adp);
         volume_issue_header.setVisibility(View.VISIBLE);
         loading_spinner.setVisibility(View.INVISIBLE);

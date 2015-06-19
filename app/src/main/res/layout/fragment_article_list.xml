@@ -1,10 +1,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/margin"
-    tools:context=".ArticleListFragment">
+    android:padding="0dp"
+    tools:context=".ArticleListFragment"
+    android:background="#eeeeee">
 
-    <TextView android:text="@string/goldenwords" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:id="@+id/testText" />
+    <TextView
+        android:id="@+id/section_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:padding="4dp"
+        android:background="#444444"
+        android:textColor="#dddddd"
+        android:gravity="center"
+        android:visibility="invisible"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cards_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingBottom="0dp"
+        android:paddingTop="0dp"
+        android:layout_below="@+id/section_header"
+        android:background="#eeeeee"
+        android:cacheColorHint="#666666"
+        android:visibility="invisible">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <ProgressBar
+        android:id="@+id/loading_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true" />
 </RelativeLayout>
