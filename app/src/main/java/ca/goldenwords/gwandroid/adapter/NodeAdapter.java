@@ -1,6 +1,5 @@
 package ca.goldenwords.gwandroid.adapter;
 
-
 import android.content.Context;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +19,6 @@ import java.util.List;
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.model.Node;
 
-
 public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder>{
 
     List<Node> nodeList;
@@ -39,7 +37,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
     @Override public void onBindViewHolder(NodeViewHolder contactViewHolder, int i) {
         Node n = nodeList.get(i);
 
-        Date time=new java.util.Date((long)n.revision*1000);
+        Date time=new java.util.Date((long)n.revision_timestamp*1000);
         SimpleDateFormat ft = new SimpleDateFormat ("MMM d, y");
 
         if(n.cover_image==1){

@@ -1,6 +1,5 @@
 package ca.goldenwords.gwandroid.model;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +13,7 @@ public class Node {
     public String title;
     public String type;
     public int created;
-    public int revision;
+    public int revision_timestamp;
 
     public String volume;
     public String issue;
@@ -43,7 +42,7 @@ public class Node {
         node.type = jo.getString("type");
         node.title = jo.getString("title");
         node.created = jo.getInt("created");
-        node.revision = jo.getInt("revision_timestamp");
+        node.revision_timestamp = jo.getInt("revision_timestamp");
         node.article_category = jo.getJSONObject("article_category").getString("name");
         node.author = jo.getString("author");
 
