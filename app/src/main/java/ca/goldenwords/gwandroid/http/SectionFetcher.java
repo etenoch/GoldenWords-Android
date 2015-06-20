@@ -1,9 +1,8 @@
-package ca.goldenwords.gwandroid.controller;
+package ca.goldenwords.gwandroid.http;
 
 
 import org.json.JSONException;
 
-import ca.goldenwords.gwandroid.model.Issue;
 import ca.goldenwords.gwandroid.model.Section;
 import de.greenrobot.event.EventBus;
 

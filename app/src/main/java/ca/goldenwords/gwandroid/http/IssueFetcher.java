@@ -1,4 +1,4 @@
-package ca.goldenwords.gwandroid.controller;
+package ca.goldenwords.gwandroid.http;
 
 
 import org.json.JSONException;

@@ -10,17 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.NodeAdapter;
-import ca.goldenwords.gwandroid.controller.IssueFetcher;
-import ca.goldenwords.gwandroid.controller.SectionFetcher;
-import ca.goldenwords.gwandroid.model.Article;
-import ca.goldenwords.gwandroid.model.Issue;
+import ca.goldenwords.gwandroid.http.SectionFetcher;
 import ca.goldenwords.gwandroid.model.Node;
 import ca.goldenwords.gwandroid.model.Section;
 import de.greenrobot.event.EventBus;

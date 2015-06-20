@@ -15,7 +15,7 @@ import java.util.List;
 
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.NodeAdapter;
-import ca.goldenwords.gwandroid.controller.IssueFetcher;
+import ca.goldenwords.gwandroid.http.IssueFetcher;
 import ca.goldenwords.gwandroid.model.Issue;
 import ca.goldenwords.gwandroid.model.Node;
 import de.greenrobot.event.EventBus;
