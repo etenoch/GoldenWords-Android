@@ -33,24 +33,21 @@ public class ArticleListFragment extends Fragment {
 
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_article_list, container, false);
         fragmentView = v;
         String section = getArguments().getString("section");
 
-        new SectionFetcher("http://goldenwords.ca/api/get/list/"+section).execute();
+        new SectionFetcher(getString(R.string.baseurl)+"/list/"+section).execute();
         return v;
     }
 
-    @Override
-    public void onStart() {
+    @Override public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
     }
 
-    @Override
-    public void onStop() {
+    @Override public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }

@@ -34,7 +34,6 @@ public class Section {
             }
         }
 
-
         return section;
     }
 

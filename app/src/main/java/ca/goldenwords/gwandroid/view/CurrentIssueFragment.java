@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,23 +27,20 @@ public class CurrentIssueFragment extends Fragment {
     public CurrentIssueFragment() {
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_current_issue, container, false);
         fragmentView = v;
 
-        new IssueFetcher("http://goldenwords.ca/api/get/issue/49/25").execute();
+        new IssueFetcher(getString(R.string.baseurl)+"/issue").execute();
         return v;
     }
 
-    @Override
-    public void onStart() {
+    @Override public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
     }
 
-    @Override
-    public void onStop() {
+    @Override public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
@@ -76,8 +71,6 @@ public class CurrentIssueFragment extends Fragment {
         loading_spinner.setVisibility(View.INVISIBLE);
 
     }
-
-
 
 
 }
