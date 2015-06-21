@@ -1,5 +1,3 @@
-# Golden Words - Android App
-
-<a href='https://app.ship.io/dashboard#/jobs/8237/history' target='_blank'><img src='https://app.ship.io/jobs/eH_Jofr6QmgFBKUj/build_status.png' width="180"/></a>
+# Golden Words - Android App &nbsp;<a href='https://circleci.com/gh/etenoch/GoldenWords-Android' target='_blank'><img src='https://circleci.com/gh/etenoch/GoldenWords-Android.svg?style=svg&circle-token=7222f7d9b52289bdcd8eb7cf9db00d7835af1034' width="110"/></a>
 
 <a href='http://dev.enochtam.com/goldenwords-android-apk.php' target='_blank'>Download Lastest APK</a>
