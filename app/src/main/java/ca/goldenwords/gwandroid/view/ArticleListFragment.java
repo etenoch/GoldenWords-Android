@@ -16,7 +16,7 @@ import java.util.List;
 
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.NodeAdapter;
-import ca.goldenwords.gwandroid.http.SectionFetcher;
+import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.model.Node;
 import ca.goldenwords.gwandroid.model.Section;
 import de.greenrobot.event.EventBus;
@@ -34,7 +34,7 @@ public class ArticleListFragment extends Fragment {
         fragmentView = v;
         String section = getArguments().getString("section");
 
-        new SectionFetcher(getString(R.string.baseurl)+"/list/"+section).execute();
+        new ListFetcher(getString(R.string.baseurl)+"/list/"+section, ListFetcher.Type.SECTION).execute();
         return v;
     }
 
@@ -55,12 +55,11 @@ public class ArticleListFragment extends Fragment {
         section_header.setText(section.name);
 
         RecyclerView recList = (RecyclerView) fragmentView.findViewById(R.id.cards_list);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        recList.setLayoutManager(llm);
+        recList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         List<Node> nodes = new ArrayList<>();
 
-        NodeAdapter adp = new NodeAdapter(nodes,getActivity());
+        NodeAdapter adp = new NodeAdapter(nodes,getActivity(),ListFetcher.Type.SECTION);
 
         // sort Set into List for adapting
         for (Node s : section.nodes) {

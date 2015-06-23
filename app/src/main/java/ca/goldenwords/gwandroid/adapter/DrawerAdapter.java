@@ -1,4 +1,4 @@
-package ca.goldenwords.gwandroid;
+package ca.goldenwords.gwandroid.adapter;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,8 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.view.ArticleListFragment;
 import ca.goldenwords.gwandroid.view.CurrentIssueFragment;
+import de.greenrobot.event.EventBus;
 
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder> {
 
@@ -53,25 +55,10 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                 args.putString("section", section.toString());
                 fragment.setArguments(args);
             }
-
-
-            if(fragment != null){
-                final Fragment nextFragment = fragment;
-                final FragmentActivity activity = (FragmentActivity)view.getContext();
-                final FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
-
-                Runnable r = new Runnable() {
-                    public void run() {
-                        ft.replace(R.id.fragment_container, nextFragment).commit();
-                    }
-                };
-                new Handler().postDelayed(r, 80); // run on new thread with a slight delay to avoid animation stutters
-
-            }
-
+            EventBus.getDefault().post(fragment);
         }
 
-    }
+    }// class ViewHolder
 
     public DrawerAdapter(String titles[]){
         mNavTitles = titles;

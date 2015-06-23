@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 import ca.goldenwords.gwandroid.R;
+import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.model.Node;
 
 public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder>{
@@ -24,10 +25,13 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
     List<Node> nodeList;
     Context context;
     private int lastPosition = -1;
+    private ListFetcher.Type type;
 
-    public NodeAdapter(List<Node> nodeList,Context c){
+
+    public NodeAdapter(List<Node> nodeList,Context c,ListFetcher.Type type){
         this.nodeList = nodeList;
         this.context = c;
+        this.type=type;
     }
 
     @Override public int getItemCount() {
@@ -46,8 +50,11 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
         }else contactViewHolder.cover_image.setVisibility(View.INVISIBLE);
 
         contactViewHolder.card_headline.setText(n.title);
-        contactViewHolder.card_details.setText(n.article_category+" - "+n.author+" - "+ft.format(time));
-
+        if(type == ListFetcher.Type.ISSUE) {
+            contactViewHolder.card_details.setText(n.article_category + " - " + n.author + " - " + ft.format(time));
+        }if(type == ListFetcher.Type.SECTION) {
+            contactViewHolder.card_details.setText(n.author + " - " + ft.format(time));
+        }
 //        setAnimation(contactViewHolder.container, i);
     }
 

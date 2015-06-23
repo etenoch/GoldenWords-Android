@@ -14,7 +14,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import ca.goldenwords.gwandroid.adapter.DrawerAdapter;
+import ca.goldenwords.gwandroid.utils.CustomToast;
 import ca.goldenwords.gwandroid.view.CurrentIssueFragment;
+import de.greenrobot.event.EventBus;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout Drawer;
 
     ActionBarDrawerToggle mDrawerToggle;
+    Fragment nextFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +47,16 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new DrawerAdapter(getApplication().getResources().getStringArray(R.array.section_codes));
 
         mRecyclerView.setAdapter(mAdapter);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar,R.string.openDrawer,R.string.closeDrawer){
             @Override public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-
             }
             @Override public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-
+                if(nextFragment!=null) changeFragment(nextFragment);
             }
         };
         Drawer.setDrawerListener(mDrawerToggle);
@@ -66,22 +68,42 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    @Override public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) { // action bar clicks
+    @Override public boolean onOptionsItemSelected(MenuItem item) { // action bar clicks
         int id = item.getItemId();
-
         if (id == R.id.action_search) {
             Toast.makeText(getApplicationContext(), "Search", Toast.LENGTH_SHORT).show();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    public void changeFragment(Fragment nextFragment){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_container, nextFragment).commit();
+        nextFragment=null;
+    }
+
+    public void onEvent(Fragment nextFragment){  // set next fragment via EventBus
+        this.nextFragment=nextFragment;
+    }
+
+    public void onEvent(CustomToast toast){
+        Toast.makeText(this,toast.getMessage(),Toast.LENGTH_LONG).show();
     }
 
 }

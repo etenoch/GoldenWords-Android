@@ -15,7 +15,7 @@ import java.util.List;
 
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.NodeAdapter;
-import ca.goldenwords.gwandroid.http.IssueFetcher;
+import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.model.Issue;
 import ca.goldenwords.gwandroid.model.Node;
 import de.greenrobot.event.EventBus;
@@ -31,7 +31,7 @@ public class CurrentIssueFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_current_issue, container, false);
         fragmentView = v;
 
-        new IssueFetcher(getString(R.string.baseurl)+"/issue").execute();
+        new ListFetcher(getString(R.string.baseurl)+"/issue",ListFetcher.Type.ISSUE).execute();
         return v;
     }
 
@@ -52,16 +52,15 @@ public class CurrentIssueFragment extends Fragment {
         volume_issue_header.setText("Volume " + currentIssue.volume + " - Issue " + currentIssue.issue);
 
         RecyclerView recList = (RecyclerView) fragmentView.findViewById(R.id.cards_list);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        recList.setLayoutManager(llm);
+        recList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         List<Node> nodes = new ArrayList<>();
 
-        NodeAdapter adp = new NodeAdapter(nodes,getActivity());
+        NodeAdapter adp = new NodeAdapter(nodes,getActivity(),ListFetcher.Type.ISSUE);
 
         // sort HashMap into List for adapting
         for (Node s : currentIssue.nodes) {
-            if(s.cover_image==1) nodes.add(0, s);
+            if(s.cover_image==1) nodes.add(0, s); // put cover image first
             else nodes.add(s);
         }
 
