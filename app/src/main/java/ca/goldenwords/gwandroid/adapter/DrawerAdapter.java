@@ -62,20 +62,15 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
     public DrawerAdapter(String titles[]){
         mNavTitles = titles;
-
     }
 
     @Override public DrawerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         if (viewType == TYPE_ITEM) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row,parent,false);
-            ViewHolder vhItem = new ViewHolder(v,viewType);
-            return vhItem;
-
+            return new ViewHolder(v,viewType);
         } else if (viewType == TYPE_HEADER) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header,parent,false);
-            ViewHolder vhHeader = new ViewHolder(v,viewType);
-            return vhHeader;
+            return new ViewHolder(v,viewType);
         }
         return null;
     }

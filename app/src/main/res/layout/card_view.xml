@@ -11,9 +11,9 @@
     android:layout_marginRight="10dp"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
-    android:focusable="true"
     android:clickable="true"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="?android:attr/selectableItemBackground"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/cover_image"

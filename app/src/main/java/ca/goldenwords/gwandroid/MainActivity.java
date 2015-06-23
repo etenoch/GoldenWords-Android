@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     public void changeFragment(Fragment nextFragment){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, nextFragment).commit();
-        nextFragment=null;
+        this.nextFragment=null;
     }
 
     public void onEvent(Fragment nextFragment){  // set next fragment via EventBus
