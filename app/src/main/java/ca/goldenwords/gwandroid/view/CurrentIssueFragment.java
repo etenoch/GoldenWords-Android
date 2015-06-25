@@ -28,11 +28,15 @@ public class CurrentIssueFragment extends Fragment {
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_current_issue, container, false);
-        fragmentView = v;
+        return getPersistentView(inflater,container,savedInstanceState);
+    }
 
-        new ListFetcher(getString(R.string.baseurl)+"/issue",ListFetcher.Type.ISSUE).execute();
-        return v;
+    public View getPersistentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (fragmentView == null) {
+            fragmentView = inflater.inflate(R.layout.fragment_current_issue, container, false);
+            new ListFetcher(getString(R.string.baseurl)+"/issue",ListFetcher.Type.ISSUE).execute();
+        }
+        return fragmentView;
     }
 
     @Override public void onStart() {

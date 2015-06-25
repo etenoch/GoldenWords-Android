@@ -30,13 +30,19 @@ public class ArticleListFragment extends Fragment {
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_article_list, container, false);
-        fragmentView = v;
-        String section = getArguments().getString("section");
-
-        new ListFetcher(getString(R.string.baseurl)+"/list/"+section, ListFetcher.Type.SECTION).execute();
-        return v;
+        return getPersistentView(inflater,container,savedInstanceState);
     }
+
+    public View getPersistentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (fragmentView == null) {
+            fragmentView = inflater.inflate(R.layout.fragment_article_list, container, false);
+
+            String section = getArguments().getString("section");
+            new ListFetcher(getString(R.string.baseurl)+"/list/"+section, ListFetcher.Type.SECTION).execute();
+        }
+        return fragmentView;
+    }
+
 
     @Override public void onStart() {
         super.onStart();

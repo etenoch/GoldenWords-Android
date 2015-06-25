@@ -33,8 +33,9 @@ public class ArticleViewFragment extends Fragment {
         fragmentView = v;
         EventBus.getDefault().register(this);
 
-        ((MainActivity) getActivity()).getMDrawerToggle().setDrawerIndicatorEnabled(false);
-        ((MainActivity) getActivity()).getMDrawerToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
+        MainActivity ac = (MainActivity)getActivity();
+        ac.getMDrawerToggle().setDrawerIndicatorEnabled(false);
+        ac.getMDrawerToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
             }
@@ -44,7 +45,7 @@ public class ArticleViewFragment extends Fragment {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
         }
-        ((MainActivity)getActivity()).getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        ac.getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         return v;
     }
@@ -61,9 +62,10 @@ public class ArticleViewFragment extends Fragment {
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setHomeButtonEnabled(false);
         }
-        ((MainActivity)getActivity()).getMDrawerToggle().setDrawerIndicatorEnabled(true);
-        ((MainActivity)getActivity()).getMDrawerToggle().syncState();
-        ((MainActivity)getActivity()).getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        MainActivity ac = (MainActivity)getActivity();
+        ac.getMDrawerToggle().setDrawerIndicatorEnabled(true);
+        ac.getMDrawerToggle().syncState();
+        ac.getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
     }
 
@@ -76,7 +78,6 @@ public class ArticleViewFragment extends Fragment {
         ((TextView) fragmentView.findViewById(R.id.author)).setText(node.author);
         ((TextView) fragmentView.findViewById(R.id.date)).setText("Published on "+ft.format(time));
         ((TextView) fragmentView.findViewById(R.id.section)).setText(node.article_category);
-
         ((WebView) fragmentView.findViewById(R.id.webView)).loadDataWithBaseURL(null, node.html_content,"text/html","UTF-8",null);
     }
 
