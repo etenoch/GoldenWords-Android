@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,20 +17,23 @@ import android.widget.Toast;
 
 import ca.goldenwords.gwandroid.adapter.DrawerAdapter;
 import ca.goldenwords.gwandroid.utils.CustomToast;
+import ca.goldenwords.gwandroid.utils.OnBackPressedListener;
 import ca.goldenwords.gwandroid.view.CurrentIssueFragment;
 import de.greenrobot.event.EventBus;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
+    Toolbar toolbar;
 
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
-    DrawerLayout Drawer;
+    DrawerLayout drawer;
 
     ActionBarDrawerToggle mDrawerToggle;
     Fragment nextFragment;
+
+    protected OnBackPressedListener onBackPressedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);
-        mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar,R.string.openDrawer,R.string.closeDrawer){
+        drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.openDrawer,R.string.closeDrawer){
             @Override public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
             }
@@ -59,8 +63,14 @@ public class MainActivity extends AppCompatActivity {
                 if(nextFragment!=null) changeFragment(nextFragment);
             }
         };
-        Drawer.setDrawerListener(mDrawerToggle);
+        drawer.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
+
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override public void onClick(View v) {
+//                drawer.openDrawer(Gravity.LEFT);
+//            }
+//        });
 
         Fragment nextFragment = new CurrentIssueFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -84,13 +94,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) { // action bar clicks
+//        Toast.makeText(this,"menu click",Toast.LENGTH_SHORT).show();
+
         int id = item.getItemId();
         if (id == R.id.action_search) {
             Toast.makeText(getApplicationContext(), "Search", Toast.LENGTH_SHORT).show();
             return true;
         }
+//        }else if (id == android.R.id.home){
+//            Toast.makeText(this,"home click",Toast.LENGTH_SHORT).show();
+//            getFragmentManager().popBackStack();
+//            return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
+
+    public ActionBarDrawerToggle getMDrawerToggle(){
+        return mDrawerToggle;
+    }
+
+    public DrawerLayout getDrawer() {
+        return drawer;
+    }
+
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
+
 
     public void changeFragment(Fragment nextFragment){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

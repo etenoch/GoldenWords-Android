@@ -3,6 +3,7 @@ package ca.goldenwords.gwandroid.adapter;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import ca.goldenwords.gwandroid.MainActivity;
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.model.Node;
@@ -102,6 +104,16 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
             ft.addToBackStack(null);
             ft.commit();
             ((AppCompatActivity)context).getSupportFragmentManager().executePendingTransactions();
+
+//            ((MainActivity) context).getMDrawerToggle().setDrawerIndicatorEnabled(false);
+//            ActionBar actionBar = ((AppCompatActivity) context).getSupportActionBar();
+//            if (actionBar != null) {
+//                actionBar.setHomeButtonEnabled(true);
+//                actionBar.setDisplayHomeAsUpEnabled(true);
+//            }
+
+//            ((MainActivity)context).getMDrawerToggle().syncState();
+
             EventBus.getDefault().post(nodeData);
         }
 
