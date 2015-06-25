@@ -105,15 +105,6 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
             ft.commit();
             ((AppCompatActivity)context).getSupportFragmentManager().executePendingTransactions();
 
-//            ((MainActivity) context).getMDrawerToggle().setDrawerIndicatorEnabled(false);
-//            ActionBar actionBar = ((AppCompatActivity) context).getSupportActionBar();
-//            if (actionBar != null) {
-//                actionBar.setHomeButtonEnabled(true);
-//                actionBar.setDisplayHomeAsUpEnabled(true);
-//            }
-
-//            ((MainActivity)context).getMDrawerToggle().syncState();
-
             EventBus.getDefault().post(nodeData);
         }
 

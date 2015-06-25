@@ -1,38 +1,23 @@
 package ca.goldenwords.gwandroid.view;
 
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import ca.goldenwords.gwandroid.MainActivity;
 import ca.goldenwords.gwandroid.R;
-import ca.goldenwords.gwandroid.adapter.NodeAdapter;
-import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.model.Node;
-import ca.goldenwords.gwandroid.model.Section;
-import ca.goldenwords.gwandroid.utils.BaseBackPressedListener;
 import de.greenrobot.event.EventBus;
 
 public class ArticleViewFragment extends Fragment {
@@ -59,14 +44,6 @@ public class ArticleViewFragment extends Fragment {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
         }
-//        ((MainActivity)getActivity()).getToolbar().setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back));
-//        ((MainActivity)getActivity()).getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(getActivity(), "menu click", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
         ((MainActivity)getActivity()).getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         return v;
@@ -89,20 +66,6 @@ public class ArticleViewFragment extends Fragment {
         ((MainActivity)getActivity()).getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
     }
-
-//    @Override public boolean onOptionsItemSelected(MenuItem item) {
-//        Toast.makeText(getActivity(),"menu click",Toast.LENGTH_SHORT).show();
-//
-//        switch (item.getItemId()) {
-//            case android.R.id.home:
-//                Toast.makeText(getActivity(),"home click",Toast.LENGTH_SHORT).show();
-//                getActivity().getFragmentManager().popBackStack();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-
 
     public void onEvent(Node node){
         this.node = node;

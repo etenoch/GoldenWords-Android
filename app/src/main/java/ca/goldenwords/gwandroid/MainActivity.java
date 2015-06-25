@@ -1,15 +1,14 @@
 package ca.goldenwords.gwandroid;
 
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 
 import ca.goldenwords.gwandroid.adapter.DrawerAdapter;
 import ca.goldenwords.gwandroid.utils.CustomToast;
-import ca.goldenwords.gwandroid.utils.OnBackPressedListener;
 import ca.goldenwords.gwandroid.view.CurrentIssueFragment;
 import de.greenrobot.event.EventBus;
 
@@ -32,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
     ActionBarDrawerToggle mDrawerToggle;
     Fragment nextFragment;
-
-    protected OnBackPressedListener onBackPressedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +62,6 @@ public class MainActivity extends AppCompatActivity {
         drawer.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override public void onClick(View v) {
-//                drawer.openDrawer(Gravity.LEFT);
-//            }
-//        });
-
         Fragment nextFragment = new CurrentIssueFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, nextFragment).commit();
@@ -94,18 +84,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) { // action bar clicks
-//        Toast.makeText(this,"menu click",Toast.LENGTH_SHORT).show();
-
         int id = item.getItemId();
         if (id == R.id.action_search) {
             Toast.makeText(getApplicationContext(), "Search", Toast.LENGTH_SHORT).show();
             return true;
         }
-//        }else if (id == android.R.id.home){
-//            Toast.makeText(this,"home click",Toast.LENGTH_SHORT).show();
-//            getFragmentManager().popBackStack();
-//            return true;
-//        }
         return super.onOptionsItemSelected(item);
     }
 
