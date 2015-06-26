@@ -3,23 +3,27 @@ package ca.goldenwords.gwandroid.adapter;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.List;
 
-import ca.goldenwords.gwandroid.MainActivity;
 import ca.goldenwords.gwandroid.R;
+import ca.goldenwords.gwandroid.http.ImageDownloader;
 import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.model.Node;
-import ca.goldenwords.gwandroid.view.ArticleViewFragment;
+import ca.goldenwords.gwandroid.fragments.ArticleViewFragment;
 import de.greenrobot.event.EventBus;
 
 public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder>{
@@ -28,7 +32,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
     Context context;
     private int lastPosition = -1;
     private ListFetcher.Type type;
-
+    HashMap<Integer,NodeViewHolder> persitentViews = new HashMap<>();
 
     public NodeAdapter(List<Node> nodeList,Context c,ListFetcher.Type type){
         this.nodeList = nodeList;
@@ -40,30 +44,34 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
         return nodeList.size();
     }
 
-    @Override public void onBindViewHolder(NodeViewHolder contactViewHolder, int i) {
+    @Override public void onBindViewHolder(NodeViewHolder viewHolder, int i) {
         Node n = nodeList.get(i);
-        contactViewHolder.setNodeData(n);
+        viewHolder.setNodeData(n);
 
         Date time=new java.util.Date((long)n.revision_timestamp*1000);
         SimpleDateFormat ft = new SimpleDateFormat ("MMM d, y");
 
         if(n.cover_image==1){
-            contactViewHolder.cover_image.setVisibility(View.VISIBLE);
-            contactViewHolder.cover_image.setText(n.image_url);
-        }else contactViewHolder.cover_image.setVisibility(View.INVISIBLE);
+            viewHolder.cover_image.setVisibility(View.VISIBLE);
+            viewHolder.cover_image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            new ImageDownloader(viewHolder.cover_image,n.image_url).execute();
+        }else viewHolder.cover_image.setVisibility(View.INVISIBLE);
 
-        contactViewHolder.card_headline.setText(n.title);
+        viewHolder.card_headline.setText(n.title);
         if(type == ListFetcher.Type.ISSUE) {
-            contactViewHolder.card_details.setText(n.article_category + " - " + n.author + " - " + ft.format(time));
+            String authorstring = n.author!=null && !n.author.isEmpty() ? " - " + n.author + " - " : " - ";
+            viewHolder.card_details.setText(n.article_category + authorstring + ft.format(time));
         }if(type == ListFetcher.Type.SECTION) {
-            contactViewHolder.card_details.setText(n.author + " - " + ft.format(time));
+            String authorstring = n.author!=null && !n.author.isEmpty() ? n.author + " - " :"";
+            viewHolder.card_details.setText(authorstring + ft.format(time));
         }
-//        setAnimation(contactViewHolder.container, i);
+        persitentViews.put(i,viewHolder);
+//        setAnimation(viewHolder.container, i);
+
     }
 
-    @Override public NodeViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.from(viewGroup.getContext()).
-                inflate(R.layout.card_view, viewGroup, false);
+    @Override public NodeViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view, viewGroup, false);
         return new NodeViewHolder(itemView);
     }
 
@@ -80,7 +88,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
     public class NodeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         protected TextView card_headline;
         protected TextView card_details;
-        protected TextView cover_image;
+        protected ImageView cover_image;
         protected View container;
         protected Node nodeData;
 
@@ -89,7 +97,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
             v.setOnClickListener(this);
             card_headline =  (TextView) v.findViewById(R.id.card_headline);
             card_details = (TextView)  v.findViewById(R.id.card_details);
-            cover_image = (TextView) v.findViewById(R.id.cover_image);
+            cover_image = (ImageView) v.findViewById(R.id.cover_image);
             container = v;
         }
 
@@ -101,6 +109,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
             Fragment fragment = new ArticleViewFragment();
             FragmentTransaction ft = ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragment_container, fragment);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.addToBackStack(null);
             ft.commit();
             ((AppCompatActivity)context).getSupportFragmentManager().executePendingTransactions();

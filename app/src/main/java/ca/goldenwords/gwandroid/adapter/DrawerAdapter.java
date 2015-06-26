@@ -2,10 +2,7 @@ package ca.goldenwords.gwandroid.adapter;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ca.goldenwords.gwandroid.R;
-import ca.goldenwords.gwandroid.view.ArticleListFragment;
-import ca.goldenwords.gwandroid.view.CurrentIssueFragment;
+import ca.goldenwords.gwandroid.fragments.ArticleListFragment;
+import ca.goldenwords.gwandroid.fragments.CurrentIssueFragment;
 import de.greenrobot.event.EventBus;
 
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder> {

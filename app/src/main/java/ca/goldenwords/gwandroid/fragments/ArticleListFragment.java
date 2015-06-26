@@ -1,4 +1,4 @@
-package ca.goldenwords.gwandroid.view;
+package ca.goldenwords.gwandroid.fragments;
 
 
 import android.os.Bundle;
@@ -23,11 +23,9 @@ import de.greenrobot.event.EventBus;
 
 public class ArticleListFragment extends Fragment {
 
-    View fragmentView;
+    private View fragmentView;
 
-    public ArticleListFragment() {
-
-    }
+    public ArticleListFragment() {}
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return getPersistentView(inflater,container,savedInstanceState);
@@ -54,6 +52,8 @@ public class ArticleListFragment extends Fragment {
         super.onStop();
     }
 
+    // event bus handler
+    // data has loaded
     public void onEvent(Section section){
         ProgressBar loading_spinner = (ProgressBar)fragmentView.findViewById(R.id.loading_spinner);
 

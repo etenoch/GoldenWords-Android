@@ -1,4 +1,4 @@
-package ca.goldenwords.gwandroid.view;
+package ca.goldenwords.gwandroid.fragments;
 
 
 import android.os.Bundle;
@@ -22,17 +22,17 @@ import de.greenrobot.event.EventBus;
 
 public class ArticleViewFragment extends Fragment {
 
-    View fragmentView;
-    Node node;
+    private View fragmentView;
+    private Node node;
 
-    public ArticleViewFragment() {
-    }
+    public ArticleViewFragment() {}
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.article_view, container, false);
         fragmentView = v;
         EventBus.getDefault().register(this);
 
+        // change action bar. back button
         MainActivity ac = (MainActivity)getActivity();
         ac.getMDrawerToggle().setDrawerIndicatorEnabled(false);
         ac.getMDrawerToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
@@ -55,6 +55,7 @@ public class ArticleViewFragment extends Fragment {
         super.onStop();
     }
 
+    // change action bar back
     @Override public void onDetach() {
         super.onDetach();
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -66,11 +67,13 @@ public class ArticleViewFragment extends Fragment {
         ac.getMDrawerToggle().setDrawerIndicatorEnabled(true);
         ac.getMDrawerToggle().syncState();
         ac.getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-
     }
 
+    // event bus events
     public void onEvent(Node node){
         this.node = node;
+        ((WebView) fragmentView.findViewById(R.id.webView)).loadDataWithBaseURL(null, node.html_content,"text/html","UTF-8",null);
+
         Date time=new java.util.Date((long)node.revision_timestamp*1000);
         SimpleDateFormat ft = new SimpleDateFormat ("MMM d, y");
 
@@ -78,7 +81,6 @@ public class ArticleViewFragment extends Fragment {
         ((TextView) fragmentView.findViewById(R.id.author)).setText(node.author);
         ((TextView) fragmentView.findViewById(R.id.date)).setText("Published on "+ft.format(time));
         ((TextView) fragmentView.findViewById(R.id.section)).setText(node.article_category);
-        ((WebView) fragmentView.findViewById(R.id.webView)).loadDataWithBaseURL(null, node.html_content,"text/html","UTF-8",null);
     }
 
 }

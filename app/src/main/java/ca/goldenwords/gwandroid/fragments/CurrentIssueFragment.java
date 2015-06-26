@@ -1,4 +1,4 @@
-package ca.goldenwords.gwandroid.view;
+package ca.goldenwords.gwandroid.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import java.util.List;
 
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.NodeAdapter;
+import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
 import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.model.Issue;
 import ca.goldenwords.gwandroid.model.Node;
@@ -22,10 +24,9 @@ import de.greenrobot.event.EventBus;
 
 public class CurrentIssueFragment extends Fragment {
 
-    View fragmentView;
+    private View fragmentView;
 
-    public CurrentIssueFragment() {
-    }
+    public CurrentIssueFragment() {}
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         return getPersistentView(inflater,container,savedInstanceState);
@@ -49,6 +50,8 @@ public class CurrentIssueFragment extends Fragment {
         super.onStop();
     }
 
+    // event bus handler
+    // data has loaded
     public void onEvent(Issue currentIssue){
         ProgressBar loading_spinner = (ProgressBar)fragmentView.findViewById(R.id.loading_spinner);
 
@@ -73,6 +76,11 @@ public class CurrentIssueFragment extends Fragment {
         volume_issue_header.setVisibility(View.VISIBLE);
         loading_spinner.setVisibility(View.INVISIBLE);
 
+    }
+
+    public void onEvent(ImageDownloadedEvent e){
+        ImageView iv = e.getImageView();
+        iv.setImageBitmap(e.getImage());
     }
 
 

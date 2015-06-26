@@ -44,7 +44,7 @@ public class Node {
         node.created = jo.getInt("created");
         node.revision_timestamp = jo.getInt("revision_timestamp");
         node.article_category = jo.getJSONObject("article_category").getString("name");
-        node.author = jo.getString("author");
+        node.author = jo.isNull("author") ? null : jo.getString("author");
 
         node.image_url = jo.getString("image_url");
         node.video_url = jo.getString("video_url");
