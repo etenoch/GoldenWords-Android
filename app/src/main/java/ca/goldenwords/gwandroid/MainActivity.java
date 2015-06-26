@@ -16,20 +16,19 @@ import android.widget.Toast;
 
 import ca.goldenwords.gwandroid.adapter.DrawerAdapter;
 import ca.goldenwords.gwandroid.utils.CustomToast;
-import ca.goldenwords.gwandroid.view.CurrentIssueFragment;
+import ca.goldenwords.gwandroid.fragments.CurrentIssueFragment;
 import de.greenrobot.event.EventBus;
 
 public class MainActivity extends AppCompatActivity {
 
-    Toolbar toolbar;
+    private Toolbar toolbar;
 
-    RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
-    RecyclerView.LayoutManager mLayoutManager;
-    DrawerLayout drawer;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private DrawerLayout drawer;
 
-    ActionBarDrawerToggle mDrawerToggle;
-    Fragment nextFragment;
+    private ActionBarDrawerToggle drawerToggle;
+    private Fragment nextFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +38,19 @@ public class MainActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT >=21)
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
+        // set up toolbar
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
-        mRecyclerView.setHasFixedSize(true);
-        mAdapter = new DrawerAdapter(getApplication().getResources().getStringArray(R.array.section_codes));
-
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // set up drawer
+        recyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
+        recyclerView.setHasFixedSize(true);
+        adapter = new DrawerAdapter(getApplication().getResources().getStringArray(R.array.section_codes));
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.openDrawer,R.string.closeDrawer){
+        drawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.openDrawer,R.string.closeDrawer){
             @Override public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
             }
@@ -59,13 +59,14 @@ public class MainActivity extends AppCompatActivity {
                 if(nextFragment!=null) changeFragment(nextFragment);
             }
         };
-        drawer.setDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
+        drawer.setDrawerListener(drawerToggle);
+        drawerToggle.syncState();
 
+        // open first fragment
         Fragment nextFragment = new CurrentIssueFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.replace(R.id.fragment_container, nextFragment).commit();
-
     }
 
     @Override public void onStart() {
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public ActionBarDrawerToggle getMDrawerToggle(){
-        return mDrawerToggle;
+        return drawerToggle;
     }
 
     public DrawerLayout getDrawer() {
@@ -104,13 +105,14 @@ public class MainActivity extends AppCompatActivity {
         return toolbar;
     }
 
-
     public void changeFragment(Fragment nextFragment){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.replace(R.id.fragment_container, nextFragment).commit();
         this.nextFragment=null;
     }
 
+    // Event bus events
     public void onEvent(Fragment nextFragment){  // set next fragment via EventBus
         this.nextFragment=nextFragment;
     }
