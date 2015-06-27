@@ -1,24 +1,18 @@
 package ca.goldenwords.gwandroid.http;
 
 
-import android.widget.Toast;
-
 import org.json.JSONException;
 
-import ca.goldenwords.gwandroid.data.DataSource;
 import ca.goldenwords.gwandroid.model.Issue;
+import ca.goldenwords.gwandroid.model.Node;
 import ca.goldenwords.gwandroid.model.Section;
 import ca.goldenwords.gwandroid.utils.CustomToast;
 import de.greenrobot.event.EventBus;
 
-public class ListFetcher extends AsyncTaskFetcher {
+public class NodeFetcher extends AsyncTaskFetcher {
 
-    public enum Type {ISSUE,SECTION};
-    private Type type;
-
-    public ListFetcher(String stringUrl,Type type){
+    public NodeFetcher(String stringUrl){
         super(stringUrl);
-        this.type = type;
     }
 
     @Override protected void onPreExecute() {
@@ -28,15 +22,8 @@ public class ListFetcher extends AsyncTaskFetcher {
 
     @Override protected void onPostExecute(String result) {
         try{
-            if(type == Type.ISSUE){
-                Issue issue = Issue.fromJson(result);
-                DataSource.addToCache(issue);
-                EventBus.getDefault().post(issue);
-            }else if (type==Type.SECTION){
-                Section section = Section.fromJson(result);
-                DataSource.addToCache(section);
-                EventBus.getDefault().post(section);
-            }
+            Node node = Node.fromJson(result);
+            EventBus.getDefault().post(node);
         }catch(JSONException e){
             e.printStackTrace();
             EventBus.getDefault().post(new CustomToast("Oops. The dev fucked up :("));

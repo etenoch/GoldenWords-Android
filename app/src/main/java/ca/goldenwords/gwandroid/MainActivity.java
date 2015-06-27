@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import ca.goldenwords.gwandroid.adapter.DrawerAdapter;
+import ca.goldenwords.gwandroid.data.DataSource;
 import ca.goldenwords.gwandroid.utils.CustomToast;
 import ca.goldenwords.gwandroid.fragments.CurrentIssueFragment;
 import de.greenrobot.event.EventBus;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DataSource.setContext(this);
 
         if (android.os.Build.VERSION.SDK_INT >=21)
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
