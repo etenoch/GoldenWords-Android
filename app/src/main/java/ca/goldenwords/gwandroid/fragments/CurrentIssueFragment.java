@@ -30,6 +30,7 @@ public class CurrentIssueFragment extends Fragment {
     public CurrentIssueFragment() {}
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         return getPersistentView(inflater,container,savedInstanceState);
     }
 
@@ -40,11 +41,6 @@ public class CurrentIssueFragment extends Fragment {
             DataSource.postIssueToBus();
         }
         return fragmentView;
-    }
-
-    @Override public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
     }
 
     @Override public void onStop() {

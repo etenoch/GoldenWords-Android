@@ -23,6 +23,10 @@ public class Issue {
     }
 
     public static Issue fromJson(String jsonString) throws JSONException{
+        return fromJson(jsonString,false);
+    }
+
+    public static Issue fromJson(String jsonString,boolean addToCache) throws JSONException{
         Issue issue = new Issue();
         issue.jsonString = jsonString;
 
@@ -34,7 +38,7 @@ public class Issue {
         while( keys.hasNext() ) {
             String key = (String)keys.next();
             if ( obj.get(key) instanceof JSONObject ){
-                n = Node.fromJson((JSONObject) obj.get(key));
+                n = Node.fromJson((JSONObject) obj.get(key),addToCache);
                 issue.nodes.add(n);
             }
         }

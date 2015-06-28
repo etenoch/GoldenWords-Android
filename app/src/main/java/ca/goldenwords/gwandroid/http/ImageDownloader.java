@@ -28,7 +28,6 @@ public class ImageDownloader extends AsyncTask<Void, Void, Bitmap> {
             try {
                 InputStream in = new java.net.URL(url).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
-                Log.i("not and error", "wooooooo");
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();

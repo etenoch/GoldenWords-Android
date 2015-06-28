@@ -39,11 +39,15 @@ public class Node {
     public int slider_item;
 
     public static Node fromJson(String jsonString) throws JSONException {
-        JSONObject jso = new JSONObject(jsonString);
-        return Node.fromJson(jso);
+        return Node.fromJson(jsonString,false);
     }
 
-    public static Node fromJson(JSONObject jo) throws JSONException {
+    public static Node fromJson(String jsonString,boolean addToCache) throws JSONException {
+        JSONObject jso = new JSONObject(jsonString);
+        return Node.fromJson(jso,addToCache);
+    }
+
+    public static Node fromJson(JSONObject jo,boolean addToCache) throws JSONException {
         Node node = new Node();
 
         node.nid = jo.getInt("nid");
@@ -78,7 +82,7 @@ public class Node {
         for (int i = 0; i < t.length(); i++)
             node.tags.add(t.getString(i));
 
-        DataSource.addToCache(node);
+        if(addToCache) DataSource.addToCache(node);
         return node;
     }
 

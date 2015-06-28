@@ -16,7 +16,7 @@ public class Section {
     public Set<Node> nodes;
     public String name;
 
-    public static Section fromJson(String jsonString) throws JSONException {
+    public static Section fromJson(String jsonString,boolean addToCache) throws JSONException {
         Section section = new Section();
         section.jsonString = jsonString;
 
@@ -28,7 +28,7 @@ public class Section {
         while( keys.hasNext() ) {
             String key = (String)keys.next();
             if ( obj.get(key) instanceof JSONObject ){
-                Node n = Node.fromJson((JSONObject) obj.get(key));
+                Node n = Node.fromJson((JSONObject) obj.get(key),addToCache);
                 section.nodes.add(n);
                 if(section.name==null) section.name=n.article_category;
             }

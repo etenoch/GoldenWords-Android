@@ -29,12 +29,10 @@ public class ListFetcher extends AsyncTaskFetcher {
     @Override protected void onPostExecute(String result) {
         try{
             if(type == Type.ISSUE){
-                Issue issue = Issue.fromJson(result);
-                DataSource.addToCache(issue);
+                Issue issue = Issue.fromJson(result,true);
                 EventBus.getDefault().post(issue);
             }else if (type==Type.SECTION){
-                Section section = Section.fromJson(result);
-                DataSource.addToCache(section);
+                Section section = Section.fromJson(result,true);
                 EventBus.getDefault().post(section);
             }
         }catch(JSONException e){

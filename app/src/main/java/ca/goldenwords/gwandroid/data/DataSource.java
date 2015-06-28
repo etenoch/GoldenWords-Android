@@ -40,6 +40,7 @@ public class DataSource {
     public static void postIssueToBus(){
         if(currentIssue >-1 && currentVolume>-1){
             postIssueToBus(currentVolume,currentIssue);
+            return;
         }else{
             postIssueFetcher();
         }
@@ -63,6 +64,7 @@ public class DataSource {
                 issue.volume_id =n.volume_id;
             }
             EventBus.getDefault().post(issue);
+            return;
         }
         postIssueFetcher(volume_id,issue_id);
     }

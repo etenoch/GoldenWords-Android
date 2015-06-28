@@ -28,6 +28,8 @@ public class ArticleListFragment extends Fragment {
     public ArticleListFragment() {}
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
+
         return getPersistentView(inflater,container,savedInstanceState);
     }
 
@@ -39,12 +41,6 @@ public class ArticleListFragment extends Fragment {
             new ListFetcher(getString(R.string.baseurl)+"/list/"+section, ListFetcher.Type.SECTION).execute();
         }
         return fragmentView;
-    }
-
-
-    @Override public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
     }
 
     @Override public void onStop() {
