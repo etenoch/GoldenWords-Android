@@ -16,6 +16,7 @@ import java.util.List;
 
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.NodeAdapter;
+import ca.goldenwords.gwandroid.data.DataSource;
 import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
 import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.model.Issue;
@@ -35,7 +36,8 @@ public class CurrentIssueFragment extends Fragment {
     public View getPersistentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.fragment_current_issue, container, false);
-            new ListFetcher(getString(R.string.baseurl)+"/issue",ListFetcher.Type.ISSUE).execute();
+//            new ListFetcher(getString(R.string.baseurl)+"/issue",ListFetcher.Type.ISSUE).execute();
+            DataSource.postIssueToBus();
         }
         return fragmentView;
     }
@@ -56,7 +58,7 @@ public class CurrentIssueFragment extends Fragment {
         ProgressBar loading_spinner = (ProgressBar)fragmentView.findViewById(R.id.loading_spinner);
 
         TextView volume_issue_header = (TextView)fragmentView.findViewById(R.id.volume_issue_header);
-        volume_issue_header.setText("Volume " + currentIssue.volume + " - Issue " + currentIssue.issue);
+        volume_issue_header.setText("Volume " + currentIssue.volume_id + " - Issue " + currentIssue.issue_id);
 
         RecyclerView recList = (RecyclerView) fragmentView.findViewById(R.id.cards_list);
         recList.setLayoutManager(new LinearLayoutManager(getActivity()));

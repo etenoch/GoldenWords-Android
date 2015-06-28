@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         DataSource.setContext(this);
+        DataSource.setBirthDay((int) (System.currentTimeMillis() / 1000L));
 
         if (android.os.Build.VERSION.SDK_INT >=21)
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);

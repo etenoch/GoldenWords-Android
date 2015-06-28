@@ -9,12 +9,14 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ca.goldenwords.gwandroid.data.DataSource;
+
 public class Issue {
     public String jsonString;
     public Set<Node> nodes;
 
-    public int volume;
-    public int issue;
+    public int volume_id;
+    public int issue_id;
 
     public Issue(){
 
@@ -28,19 +30,18 @@ public class Issue {
         issue.nodes = new HashSet<>();
 
         Iterator<?> keys = obj.keys();
-
+        Node n=null;
         while( keys.hasNext() ) {
             String key = (String)keys.next();
-            if ( obj.get(key) instanceof JSONObject )
-                issue.nodes.add(Node.fromJson( (JSONObject)obj.get(key) ));
+            if ( obj.get(key) instanceof JSONObject ){
+                n = Node.fromJson((JSONObject) obj.get(key));
+                issue.nodes.add(n);
+            }
         }
 
-        Node n =issue.nodes.iterator().next();
-        Matcher m = Pattern.compile("Issue\\s(\\d+)").matcher(n.issue);
-        issue.issue = m.find() ? Integer.parseInt(m.group(1)) : 0;
-
-        m = Pattern.compile("Volume\\s(\\d+)").matcher(n.volume);
-        issue.volume =  m.find() ? Integer.parseInt(m.group(1)) : 0;
+        n =issue.nodes.iterator().next();
+        issue.issue_id =n.issue_id;
+        issue.volume_id =n.volume_id;
 
         return issue;
     }

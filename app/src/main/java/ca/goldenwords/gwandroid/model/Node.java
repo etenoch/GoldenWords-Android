@@ -1,11 +1,17 @@
 package ca.goldenwords.gwandroid.model;
 
+import android.provider.ContactsContract;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import ca.goldenwords.gwandroid.data.DataSource;
 
 public class Node {
 
@@ -17,6 +23,8 @@ public class Node {
 
     public String volume;
     public String issue;
+    public int volume_id;
+    public int issue_id;
 
     public String image_url;
     public String video_url;
@@ -49,8 +57,17 @@ public class Node {
         node.image_url = jo.getString("image_url");
         node.video_url = jo.getString("video_url");
         node.html_content = jo.getString("html_content");
+
         node.issue = jo.getString("issue");
         node.volume = jo.getString("volume");
+        Pattern p = Pattern.compile("\\w+\\s(\\d+)");
+        Matcher m = p.matcher(node.issue);
+        if(m.find()) node.issue_id = Integer.parseInt(m.group(1));
+        else throw new JSONException("Couldn't get Issue ID");
+        m = p.matcher(node.volume);
+        if(m.find()) node.volume_id = Integer.parseInt(m.group(1));
+        else throw new JSONException("Couldn't get Issue ID");
+
         node.cover_image = jo.getInt("cover_image");
         node.slider_item = jo.getInt("slider_item");
 
@@ -61,6 +78,7 @@ public class Node {
         for (int i = 0; i < t.length(); i++)
             node.tags.add(t.getString(i));
 
+        DataSource.addToCache(node);
         return node;
     }
 
