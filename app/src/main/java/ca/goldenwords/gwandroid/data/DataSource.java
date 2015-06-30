@@ -3,6 +3,8 @@ package ca.goldenwords.gwandroid.data;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.media.Image;
+import android.widget.ImageView;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +12,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import ca.goldenwords.gwandroid.R;
+import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
+import ca.goldenwords.gwandroid.http.ImageDownloader;
 import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.http.NodeFetcher;
 import ca.goldenwords.gwandroid.model.Issue;
@@ -27,7 +31,12 @@ public class DataSource {
     private final static HashMap<VolumeIssueKey,Set<Integer>> issueVolumeList = new HashMap<>();
     private final static HashMap<String,TreeSet<Node>> sectionList = new HashMap<>();
     private final static HashMap<Integer,Node> nodeCache = new HashMap<>();
-    private final static HashMap<Integer,Bitmap> imageCache = new HashMap<>();
+    private final static HashMap<String,ImageDownloadedEvent> imageCache = new HashMap<>();
+
+
+    //=============================//
+    //  Post to Bus (or Download)  //
+    //=============================//
 
     public static void postNodeToBus(int nid){
         Node n = nodeCache.get(nid);
@@ -66,7 +75,7 @@ public class DataSource {
             EventBus.getDefault().post(issue);
             return;
         }
-        postIssueFetcher(volume_id,issue_id);
+        postIssueFetcher(volume_id, issue_id);
     }
 
     private static void postIssueFetcher(int volume,int issue){
@@ -76,9 +85,23 @@ public class DataSource {
         new ListFetcher(context.getString(R.string.baseurl)+"/issue",ListFetcher.Type.ISSUE).execute();
     }
 
-    public static void setContext(Context context) {
-        DataSource.context = context;
+    public static void postImageToBus(ImageView view,String url){
+        ImageDownloadedEvent imageEvent = imageCache.get(url);
+        if(imageEvent!=null) {
+            EventBus.getDefault().post(imageEvent);
+            return;
+        }
+        postImageDowloader(view, url);
     }
+
+    private static void postImageDowloader(ImageView view,String url){
+        new ImageDownloader(view,url).execute();
+    }
+
+
+    //==================//
+    //   Add to cache   //
+    //==================//
 
     public static void addToCache(Node node){
         nodeCache.put(node.nid, node);
@@ -98,7 +121,7 @@ public class DataSource {
         }
     }
 
-    public static void addToIssueCache(int volume, int issue, int nid){
+    public static void addToCache(int volume, int issue, int nid){
         VolumeIssueKey key = new VolumeIssueKey(volume,issue);
         if(issueVolumeList.get(key)!=null){
             issueVolumeList.get(key).add(nid);
@@ -114,6 +137,18 @@ public class DataSource {
     }
 
 
+    public static void addToCache(ImageDownloadedEvent image){
+        imageCache.put(image.getUrl(),image);
+    }
+
+
+    //==================//
+    //   Other Stuff    //
+    //==================//
+
+    public static void setContext(Context context) {
+        DataSource.context = context;
+    }
 
     public static int getBirthDay() {
         return unixTime;

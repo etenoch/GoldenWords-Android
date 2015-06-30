@@ -13,7 +13,7 @@ import de.greenrobot.event.EventBus;
 
 public class ListFetcher extends AsyncTaskFetcher {
 
-    public enum Type {ISSUE,SECTION};
+    public enum Type {ISSUE,SECTION}
     private Type type;
 
     public ListFetcher(String stringUrl,Type type){
