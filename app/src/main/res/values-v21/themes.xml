@@ -2,6 +2,7 @@
 <resources>
     <style name="ActionBarTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/gwYellow</item>
         <item name="colorPrimaryDark">@color/gwYellowDark</item>
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:statusBarColor">@color/gwYellowTransparent</item>
