@@ -31,7 +31,7 @@ public class DataSource {
     private final static HashMap<VolumeIssueKey,Set<Integer>> issueVolumeList = new HashMap<>();
     private final static HashMap<String,TreeSet<Node>> sectionList = new HashMap<>();
     private final static HashMap<Integer,Node> nodeCache = new HashMap<>();
-    private final static HashMap<String,ImageDownloadedEvent> imageCache = new HashMap<>();
+    private final static HashMap<String,Bitmap> imageCache = new HashMap<>();
 
 
     //=============================//
@@ -86,15 +86,16 @@ public class DataSource {
     }
 
     public static void postImageToBus(ImageView view,String url){
-        ImageDownloadedEvent imageEvent = imageCache.get(url);
-        if(imageEvent!=null) {
-            EventBus.getDefault().post(imageEvent);
+        Bitmap bmp = imageCache.get(url);
+        if(bmp!=null) {
+            ImageDownloadedEvent ide = new ImageDownloadedEvent(view,bmp,url);
+            EventBus.getDefault().post(ide);
             return;
         }
-        postImageDowloader(view, url);
+        postImageDownloader(view, url);
     }
 
-    private static void postImageDowloader(ImageView view,String url){
+    private static void postImageDownloader(ImageView view,String url){
         new ImageDownloader(view,url).execute();
     }
 
@@ -138,7 +139,7 @@ public class DataSource {
 
 
     public static void addToCache(ImageDownloadedEvent image){
-        imageCache.put(image.getUrl(),image);
+        imageCache.put(image.getUrl(),image.getImage());
     }
 
 

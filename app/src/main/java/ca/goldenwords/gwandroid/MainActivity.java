@@ -18,6 +18,7 @@ import ca.goldenwords.gwandroid.adapter.DrawerAdapter;
 import ca.goldenwords.gwandroid.data.DataSource;
 import ca.goldenwords.gwandroid.utils.CustomToast;
 import ca.goldenwords.gwandroid.fragments.CurrentIssueFragment;
+import ca.goldenwords.gwandroid.utils.GWUtils;
 import de.greenrobot.event.EventBus;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        GWUtils.setContext(this);
         DataSource.setContext(this);
         DataSource.setBirthDay((int) (System.currentTimeMillis() / 1000L));
 

@@ -38,7 +38,7 @@ public class ListFetcher extends AsyncTaskFetcher {
         }catch(JSONException e){
             e.printStackTrace();
             EventBus.getDefault().post(new CustomToast("Oops. The dev fucked up :("));
-            // TODO don't be a lazy fuck and handle this error
+            // TODO god dammit Enoch, don't be a lazy fuck and handle this error properly
         }
     }
 
