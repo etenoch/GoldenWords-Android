@@ -1,7 +1,5 @@
 package ca.goldenwords.gwandroid.model;
 
-import android.provider.ContactsContract;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,7 +9,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ca.goldenwords.gwandroid.data.DataSource;
+import ca.goldenwords.gwandroid.data.DataCache;
 
 public class Node {
 
@@ -82,7 +80,7 @@ public class Node {
         for (int i = 0; i < t.length(); i++)
             node.tags.add(t.getString(i));
 
-        if(addToCache) DataSource.addToCache(node);
+        if(addToCache) DataCache.addToCache(node);
         return node;
     }
 

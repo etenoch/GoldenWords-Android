@@ -1,9 +1,7 @@
 package ca.goldenwords.gwandroid.data;
 
-
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.widget.ImageView;
 
 import java.util.HashMap;
@@ -19,17 +17,18 @@ import ca.goldenwords.gwandroid.http.NodeFetcher;
 import ca.goldenwords.gwandroid.model.Issue;
 import ca.goldenwords.gwandroid.model.Node;
 import ca.goldenwords.gwandroid.model.Section;
+import ca.goldenwords.gwandroid.utils.Sections;
 import ca.goldenwords.gwandroid.utils.VolumeIssueKey;
 import de.greenrobot.event.EventBus;
 
-public class DataSource {
+public class DataCache {
     private static Context context;
     private static int unixTime;
 
     private static int currentVolume=-1;
     private static int currentIssue=-1;
     private final static HashMap<VolumeIssueKey,Set<Integer>> issueVolumeList = new HashMap<>();
-    private final static HashMap<String,TreeSet<Node>> sectionList = new HashMap<>();
+    private final static HashMap<Sections,TreeSet<Node>> sectionCache = new HashMap<>();
     private final static HashMap<Integer,Node> nodeCache = new HashMap<>();
     private final static HashMap<String,Bitmap> imageCache = new HashMap<>();
 
@@ -148,15 +147,11 @@ public class DataSource {
     //==================//
 
     public static void setContext(Context context) {
-        DataSource.context = context;
-    }
-
-    public static int getBirthDay() {
-        return unixTime;
+        DataCache.context = context;
     }
 
     public static void setBirthDay(int unixTime) {
-        DataSource.unixTime = unixTime;
+        DataCache.unixTime = unixTime;
     }
 
 }

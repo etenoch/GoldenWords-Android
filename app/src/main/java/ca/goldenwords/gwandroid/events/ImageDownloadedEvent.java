@@ -3,8 +3,7 @@ package ca.goldenwords.gwandroid.events;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
-import ca.goldenwords.gwandroid.data.DataSource;
-import ca.goldenwords.gwandroid.model.Node;
+import ca.goldenwords.gwandroid.data.DataCache;
 
 public class ImageDownloadedEvent {
     private ImageView imageView;
@@ -13,7 +12,7 @@ public class ImageDownloadedEvent {
 
     public ImageDownloadedEvent(ImageView imageView, Bitmap image,String url,boolean addToCache) {
         this(imageView,image,url);
-        if(addToCache) DataSource.addToCache(this);
+        if(addToCache) DataCache.addToCache(this);
     }
 
     public ImageDownloadedEvent(ImageView imageView, Bitmap image,String url) {

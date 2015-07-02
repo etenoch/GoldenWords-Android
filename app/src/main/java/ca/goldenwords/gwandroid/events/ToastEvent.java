@@ -1,11 +1,9 @@
-package ca.goldenwords.gwandroid.utils;
+package ca.goldenwords.gwandroid.events;
 
-import android.widget.Toast;
-
-public class CustomToast {
+public class ToastEvent {
     private String message;
 
-    public CustomToast(String message){
+    public ToastEvent(String message){
         this.message = message;
     }
 

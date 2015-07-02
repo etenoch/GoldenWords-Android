@@ -15,8 +15,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import ca.goldenwords.gwandroid.adapter.DrawerAdapter;
-import ca.goldenwords.gwandroid.data.DataSource;
-import ca.goldenwords.gwandroid.utils.CustomToast;
+import ca.goldenwords.gwandroid.data.DataCache;
+import ca.goldenwords.gwandroid.events.ToastEvent;
 import ca.goldenwords.gwandroid.fragments.CurrentIssueFragment;
 import ca.goldenwords.gwandroid.utils.GWUtils;
 import de.greenrobot.event.EventBus;
@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         GWUtils.setContext(this);
-        DataSource.setContext(this);
-        DataSource.setBirthDay((int) (System.currentTimeMillis() / 1000L));
+        DataCache.setContext(this);
+        DataCache.setBirthDay((int) (System.currentTimeMillis() / 1000L));
 
         if (android.os.Build.VERSION.SDK_INT >=21)
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         this.nextFragment=nextFragment;
     }
 
-    public void onEvent(CustomToast toast){
+    public void onEvent(ToastEvent toast){
         Toast.makeText(this,toast.getMessage(),Toast.LENGTH_LONG).show();
     }
 

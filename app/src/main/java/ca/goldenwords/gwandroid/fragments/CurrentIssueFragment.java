@@ -16,7 +16,7 @@ import java.util.List;
 
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.NodeAdapter;
-import ca.goldenwords.gwandroid.data.DataSource;
+import ca.goldenwords.gwandroid.data.DataCache;
 import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
 import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.model.Issue;
@@ -38,7 +38,7 @@ public class CurrentIssueFragment extends Fragment {
         if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.fragment_current_issue, container, false);
 //            new ListFetcher(getString(R.string.baseurl)+"/issue",ListFetcher.Type.ISSUE).execute();
-            DataSource.postIssueToBus();
+            DataCache.postIssueToBus();
         }
         return fragmentView;
     }

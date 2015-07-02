@@ -1,7 +1,6 @@
 package ca.goldenwords.gwandroid.adapter;
 
 import android.content.Context;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -11,18 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.InputMismatchException;
 import java.util.List;
 
 import ca.goldenwords.gwandroid.R;
-import ca.goldenwords.gwandroid.data.DataSource;
-import ca.goldenwords.gwandroid.http.ImageDownloader;
+import ca.goldenwords.gwandroid.data.DataCache;
 import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.model.Node;
 import ca.goldenwords.gwandroid.fragments.ArticleViewFragment;
@@ -56,8 +51,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
         if(n.cover_image==1){
             viewHolder.cover_image.setVisibility(View.VISIBLE);
             viewHolder.cover_image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            DataSource.postImageToBus(viewHolder.cover_image,n.image_url);
-//            new ImageDownloader(viewHolder.cover_image,n.image_url).execute();
+            DataCache.postImageToBus(viewHolder.cover_image, n.image_url);
         }else viewHolder.cover_image.setVisibility(View.INVISIBLE);
 
         viewHolder.card_headline.setText(n.title);

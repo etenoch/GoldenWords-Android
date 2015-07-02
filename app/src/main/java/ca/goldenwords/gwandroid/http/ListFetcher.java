@@ -1,14 +1,11 @@
 package ca.goldenwords.gwandroid.http;
 
 
-import android.widget.Toast;
-
 import org.json.JSONException;
 
-import ca.goldenwords.gwandroid.data.DataSource;
 import ca.goldenwords.gwandroid.model.Issue;
 import ca.goldenwords.gwandroid.model.Section;
-import ca.goldenwords.gwandroid.utils.CustomToast;
+import ca.goldenwords.gwandroid.events.ToastEvent;
 import de.greenrobot.event.EventBus;
 
 public class ListFetcher extends AsyncTaskFetcher {
@@ -37,7 +34,7 @@ public class ListFetcher extends AsyncTaskFetcher {
             }
         }catch(JSONException e){
             e.printStackTrace();
-            EventBus.getDefault().post(new CustomToast("Oops. The dev fucked up :("));
+            EventBus.getDefault().post(new ToastEvent("Oops. The dev fucked up :("));
             // TODO god dammit Enoch, don't be a lazy fuck and handle this error properly
         }
     }
