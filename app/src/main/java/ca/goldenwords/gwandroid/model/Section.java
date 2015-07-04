@@ -9,12 +9,15 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import ca.goldenwords.gwandroid.utils.GWUtils;
 import ca.goldenwords.gwandroid.utils.RevisionDateComparator;
+import ca.goldenwords.gwandroid.utils.Sections;
 
 public class Section {
     public String jsonString;
     public Set<Node> nodes;
     public String name;
+    public Sections articleCategory;
 
     public static Section fromJson(String jsonString,boolean addToCache) throws JSONException {
         Section section = new Section();
@@ -30,7 +33,10 @@ public class Section {
             if ( obj.get(key) instanceof JSONObject ){
                 Node n = Node.fromJson((JSONObject) obj.get(key),addToCache);
                 section.nodes.add(n);
-                if(section.name==null) section.name=n.article_category;
+                if(section.name==null){
+                    section.name=n.article_category;
+                    section.articleCategory = n.articleCategoryMachine;
+                }
             }
         }
 

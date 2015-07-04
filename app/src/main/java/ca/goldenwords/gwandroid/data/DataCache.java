@@ -17,6 +17,8 @@ import ca.goldenwords.gwandroid.http.NodeFetcher;
 import ca.goldenwords.gwandroid.model.Issue;
 import ca.goldenwords.gwandroid.model.Node;
 import ca.goldenwords.gwandroid.model.Section;
+import ca.goldenwords.gwandroid.utils.GWUtils;
+import ca.goldenwords.gwandroid.utils.RevisionDateComparator;
 import ca.goldenwords.gwandroid.utils.Sections;
 import ca.goldenwords.gwandroid.utils.VolumeIssueKey;
 import de.greenrobot.event.EventBus;
@@ -45,6 +47,7 @@ public class DataCache {
         }
     }
 
+    // -- Issues --
     public static void postIssueToBus(){
         if(currentIssue >-1 && currentVolume>-1){
             postIssueToBus(currentVolume,currentIssue);
@@ -84,6 +87,33 @@ public class DataCache {
         new ListFetcher(context.getString(R.string.baseurl)+"/issue",ListFetcher.Type.ISSUE).execute();
     }
 
+    // -- Sections --
+    public static void postSectionToBus(String localShortname) {
+        Sections enumKey = GWUtils.parseCategoryShortname(localShortname);
+        if (sectionCache.get(enumKey) != null) {
+            // post first 10
+            return;
+        }
+        postSectionFetcher(localShortname);
+    }
+
+    public static void postSectionToBus(String localShortname, int offset){
+        Sections enumKey = GWUtils.parseCategoryShortname(localShortname);
+        if (sectionCache.get(enumKey) != null) {
+            // post 10 starting at offset
+            return;
+        }
+        postSectionFetcher(localShortname,offset);
+    }
+
+    private static void postSectionFetcher(String shortname){
+        new ListFetcher(context.getString(R.string.baseurl)+"/list/"+shortname,ListFetcher.Type.SECTION).execute();
+    }
+    private static void postSectionFetcher(String shortname,int offset){
+        new ListFetcher(context.getString(R.string.baseurl)+"/list/"+shortname+"/"+offset,ListFetcher.Type.SECTION).execute();
+    }
+
+    // -- Images --
     public static void postImageToBus(ImageView view,String url){
         Bitmap bmp = imageCache.get(url);
         if(bmp!=null) {
@@ -133,7 +163,13 @@ public class DataCache {
     }
 
     public static void addToCache(Section section){
-
+        if(sectionCache.get(section.articleCategory)!=null){
+            sectionCache.get(section.articleCategory).addAll(section.nodes);
+        }else{
+            TreeSet<Node> l = new TreeSet<>(new RevisionDateComparator());
+            l.addAll(section.nodes);
+            sectionCache.put(section.articleCategory,l);
+        }
     }
 
 

@@ -10,6 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ca.goldenwords.gwandroid.data.DataCache;
+import ca.goldenwords.gwandroid.utils.GWUtils;
+import ca.goldenwords.gwandroid.utils.Sections;
 
 public class Node {
 
@@ -28,6 +30,7 @@ public class Node {
     public String video_url;
     public List<String> tags;
     public String article_category;
+    public Sections articleCategoryMachine;
     public String author; // field_by
 
     public String html_content;
@@ -54,6 +57,7 @@ public class Node {
         node.created = jo.getInt("created");
         node.revision_timestamp = jo.getInt("revision_timestamp");
         node.article_category = jo.getJSONObject("article_category").getString("name");
+        node.articleCategoryMachine = GWUtils.parseCategoryMachineName(jo.getJSONObject("article_category").getString("machine_name"));
         node.author = jo.isNull("author") ? null : jo.getString("author");
 
         node.image_url = jo.getString("image_url");
