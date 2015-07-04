@@ -16,6 +16,7 @@ import java.util.List;
 
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.NodeAdapter;
+import ca.goldenwords.gwandroid.data.DataCache;
 import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.model.Node;
 import ca.goldenwords.gwandroid.model.Section;
@@ -38,7 +39,8 @@ public class ArticleListFragment extends Fragment {
             fragmentView = inflater.inflate(R.layout.fragment_article_list, container, false);
 
             String section = getArguments().getString("section");
-            new ListFetcher(getString(R.string.baseurl)+"/list/"+section, ListFetcher.Type.SECTION).execute();
+//            new ListFetcher(getString(R.string.baseurl)+"/list/"+section, ListFetcher.Type.SECTION).execute();
+            DataCache.postSectionToBus(section);
         }
         return fragmentView;
     }

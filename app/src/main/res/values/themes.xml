@@ -8,6 +8,7 @@
     <style name="ActionBarTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="colorPrimaryDark">@color/gwYellowDark</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
 </resources>

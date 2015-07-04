@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +22,7 @@ import ca.goldenwords.gwandroid.fragments.CurrentIssueFragment;
 import ca.goldenwords.gwandroid.utils.GWUtils;
 import de.greenrobot.event.EventBus;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActionMode.Callback {
 
     private Toolbar toolbar;
 
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
         // set up toolbar
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+        toolbar.startActionMode(this);
+//        startSupportActionMode(this);
 
         // set up drawer
         recyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
@@ -97,6 +100,21 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        return false;
+    }
+
+    @Override public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override public void onDestroyActionMode(ActionMode mode) {
     }
 
     public ActionBarDrawerToggle getMDrawerToggle(){
