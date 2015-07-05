@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import ca.goldenwords.gwandroid.data.DataCache;
 import ca.goldenwords.gwandroid.utils.GWUtils;
 import ca.goldenwords.gwandroid.utils.RevisionDateComparator;
 import ca.goldenwords.gwandroid.utils.Sections;
@@ -40,6 +41,7 @@ public class Section {
             }
         }
 
+        if (addToCache) DataCache.addToCache(section);
         return section;
     }
 
