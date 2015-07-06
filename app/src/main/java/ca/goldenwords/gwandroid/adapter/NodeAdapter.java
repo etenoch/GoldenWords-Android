@@ -46,7 +46,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
         viewHolder.setNodeData(n);
 
         Date time=new java.util.Date((long)n.revision_timestamp*1000);
-        SimpleDateFormat ft = new SimpleDateFormat ("MMM d, y");
+        SimpleDateFormat ft = new SimpleDateFormat("MMM d, y");
 
         if(n.cover_image==1){
             viewHolder.cover_image.setVisibility(View.VISIBLE);
@@ -69,7 +69,9 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
 
     @Override public NodeViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view, viewGroup, false);
-        return new NodeViewHolder(itemView);
+        NodeViewHolder viewHolder =new NodeViewHolder(itemView);
+        if(type== ListFetcher.Type.ISSUE)viewHolder.setIsRecyclable(false);
+        return viewHolder;
     }
 
 //    private void setAnimation(View viewToAnimate, int position){

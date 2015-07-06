@@ -41,10 +41,12 @@ public class DataCache {
 
     public static void postNodeToBus(int nid){
         Node n = nodeCache.get(nid);
-        if(n!=null) EventBus.getDefault().post(n);
-        else{
-            new NodeFetcher(context.getString(R.string.baseurl)+"/article/"+nid).execute();
+        if(n!=null) {
+            EventBus.getDefault().post(n);
+            return;
         }
+        new NodeFetcher(context.getString(R.string.baseurl)+"/article/"+nid).execute();
+
     }
 
     // -- Issues --
@@ -52,9 +54,8 @@ public class DataCache {
         if(currentIssue >-1 && currentVolume>-1){
             postIssueToBus(currentVolume,currentIssue);
             return;
-        }else{
-            postIssueFetcher();
         }
+        postIssueFetcher();
     }
 
     public static void postIssueToBus(int volume_id,int issue_id){
@@ -92,6 +93,14 @@ public class DataCache {
         Sections enumKey = GWUtils.parseCategoryShortname(localShortname);
         if (sectionCache.get(enumKey) != null) {
             // post first 10
+            Section section = new Section();
+            section.nodes = new TreeSet<>(new RevisionDateComparator());
+            section.nodes.addAll(sectionCache.get(enumKey));  // TODO this doesn't actually post just 10 yet
+            section.articleCategory=enumKey;
+
+            Node first = section.nodes.iterator().next();
+            section.name=first.article_category;
+            EventBus.getDefault().post(section);
             return;
         }
         postSectionFetcher(localShortname);
