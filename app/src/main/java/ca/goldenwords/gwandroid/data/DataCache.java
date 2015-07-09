@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
+import ca.goldenwords.gwandroid.events.ToastEvent;
 import ca.goldenwords.gwandroid.http.ImageDownloader;
 import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.http.NodeFetcher;
@@ -82,10 +83,14 @@ public class DataCache {
     }
 
     private static void postIssueFetcher(int volume,int issue){
-        new ListFetcher(context.getString(R.string.baseurl)+"/issue/"+volume+"/"+issue,ListFetcher.Type.ISSUE).execute();
+        if(GWUtils.hasInternet())
+            new ListFetcher(context.getString(R.string.baseurl)+"/issue/"+volume+"/"+issue,ListFetcher.Type.ISSUE).execute();
+        else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
     }
     private static void postIssueFetcher(){
-        new ListFetcher(context.getString(R.string.baseurl)+"/issue",ListFetcher.Type.ISSUE).execute();
+        if(GWUtils.hasInternet())
+            new ListFetcher(context.getString(R.string.baseurl)+"/issue",ListFetcher.Type.ISSUE).execute();
+        else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
     }
 
     // -- Sections --
@@ -116,10 +121,14 @@ public class DataCache {
     }
 
     private static void postSectionFetcher(String shortname){
-        new ListFetcher(context.getString(R.string.baseurl)+"/list/"+shortname,ListFetcher.Type.SECTION).execute();
+        if(GWUtils.hasInternet())
+            new ListFetcher(context.getString(R.string.baseurl)+"/list/"+shortname,ListFetcher.Type.SECTION).execute();
+        else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
     }
     private static void postSectionFetcher(String shortname,int offset){
-        new ListFetcher(context.getString(R.string.baseurl)+"/list/"+shortname+"/"+offset,ListFetcher.Type.SECTION).execute();
+        if(GWUtils.hasInternet())
+            new ListFetcher(context.getString(R.string.baseurl)+"/list/"+shortname+"/"+offset,ListFetcher.Type.SECTION).execute();
+        else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
     }
 
     // -- Images --
@@ -134,7 +143,8 @@ public class DataCache {
     }
 
     private static void postImageDownloader(ImageView view,String url){
-        new ImageDownloader(view,url).execute();
+        if(GWUtils.hasInternet()) new ImageDownloader(view,url).execute();
+        else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
     }
 
 

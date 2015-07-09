@@ -142,7 +142,8 @@ public class MainActivity extends AppCompatActivity implements ActionMode.Callba
     }
 
     public void onEvent(ToastEvent toast){
-        Toast.makeText(this,toast.getMessage(),Toast.LENGTH_LONG).show();
+        if(toast.isLength_long()) Toast.makeText(this,toast.getMessage(),Toast.LENGTH_LONG).show();
+        else  Toast.makeText(this,toast.getMessage(),Toast.LENGTH_SHORT).show();
     }
 
 }

@@ -26,6 +26,7 @@ import de.greenrobot.event.EventBus;
 public class CurrentIssueFragment extends Fragment {
 
     private View fragmentView;
+    private boolean dataLoaded = false;
 
     public CurrentIssueFragment() {}
 
@@ -51,34 +52,38 @@ public class CurrentIssueFragment extends Fragment {
     // event bus handler
     // data has loaded
     public void onEvent(Issue currentIssue){
-        ProgressBar loading_spinner = (ProgressBar)fragmentView.findViewById(R.id.loading_spinner);
+        if(!dataLoaded) {
+            dataLoaded=true;
+            ProgressBar loading_spinner = (ProgressBar)fragmentView.findViewById(R.id.loading_spinner);
 
-        TextView volume_issue_header = (TextView)fragmentView.findViewById(R.id.volume_issue_header);
-        volume_issue_header.setText("Volume " + currentIssue.volume_id + " - Issue " + currentIssue.issue_id);
+            TextView volume_issue_header = (TextView)fragmentView.findViewById(R.id.volume_issue_header);
+            volume_issue_header.setText("Volume " + currentIssue.volume_id + " - Issue " + currentIssue.issue_id);
 
-        RecyclerView recList = (RecyclerView) fragmentView.findViewById(R.id.cards_list);
-        recList.setLayoutManager(new LinearLayoutManager(getActivity()));
+            RecyclerView recList = (RecyclerView) fragmentView.findViewById(R.id.cards_list);
+            recList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        List<Node> nodes = new ArrayList<>();
+            List<Node> nodes = new ArrayList<>();
 
-        NodeAdapter adp = new NodeAdapter(nodes,getActivity(),ListFetcher.Type.ISSUE);
+            NodeAdapter adp = new NodeAdapter(nodes,getActivity(),ListFetcher.Type.ISSUE);
 
-        // sort HashMap into List for adapting
-        for (Node s : currentIssue.nodes) {
-            if(s.cover_image==1) nodes.add(0, s); // put cover image first
-            else nodes.add(s);
+            // sort HashMap into List for adapting
+            for (Node s : currentIssue.nodes) {
+                if(s.cover_image==1) nodes.add(0, s); // put cover image first
+                else nodes.add(s);
+            }
+
+            recList.setVisibility(View.VISIBLE);
+            recList.setAdapter(adp);
+            volume_issue_header.setVisibility(View.VISIBLE);
+            loading_spinner.setVisibility(View.INVISIBLE);
         }
-
-        recList.setVisibility(View.VISIBLE);
-        recList.setAdapter(adp);
-        volume_issue_header.setVisibility(View.VISIBLE);
-        loading_spinner.setVisibility(View.INVISIBLE);
 
     }
 
     public void onEvent(ImageDownloadedEvent e){
         ImageView iv = e.getImageView();
         iv.setImageBitmap(e.getImage());
+        ((View)iv.getParent()).findViewById(R.id.imageProgress).setVisibility(View.INVISIBLE);
     }
 
 

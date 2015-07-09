@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -29,7 +30,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
     Context context;
     private int lastPosition = -1;
     private ListFetcher.Type type;
-    HashMap<Integer,NodeViewHolder> persitentViews = new HashMap<>();
+    HashMap<Integer,NodeViewHolder> persistentViews = new HashMap<>();
 
     public NodeAdapter(List<Node> nodeList,Context c,ListFetcher.Type type){
         this.nodeList = nodeList;
@@ -49,6 +50,8 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
         SimpleDateFormat ft = new SimpleDateFormat("MMM d, y");
 
         if(n.cover_image==1){
+            viewHolder.imageProgress.setIndeterminate(true);
+            viewHolder.imageProgress.setVisibility(View.VISIBLE);
             viewHolder.cover_image.setVisibility(View.VISIBLE);
             viewHolder.cover_image.setScaleType(ImageView.ScaleType.CENTER_CROP);
             DataCache.postImageToBus(viewHolder.cover_image, n.image_url);
@@ -62,8 +65,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
             String authorstring = n.author!=null && !n.author.isEmpty() ? n.author + " - " :"";
             viewHolder.card_details.setText(authorstring + ft.format(time));
         }
-        persitentViews.put(i,viewHolder);
-//        setAnimation(viewHolder.container, i);
+        persistentViews.put(i, viewHolder);
 
     }
 
@@ -73,15 +75,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
         if(type== ListFetcher.Type.ISSUE)viewHolder.setIsRecyclable(false);
         return viewHolder;
     }
-
-//    private void setAnimation(View viewToAnimate, int position){
-//        if (position > lastPosition){
-//            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
-//            animation.setDuration(800);
-//            viewToAnimate.startAnimation(animation);
-//            lastPosition = position;
-//        }
-//    }
+    
 
     // ViewHolder Class
     public class NodeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -90,10 +84,12 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
         protected ImageView cover_image;
         protected View container;
         protected Node nodeData;
+        protected ProgressBar imageProgress;
 
         public NodeViewHolder(View v) {
             super(v);
             v.setOnClickListener(this);
+            imageProgress = (ProgressBar) v.findViewById(R.id.imageProgress);
             card_headline =  (TextView) v.findViewById(R.id.card_headline);
             card_details = (TextView)  v.findViewById(R.id.card_details);
             cover_image = (ImageView) v.findViewById(R.id.cover_image);
