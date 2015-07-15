@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import ca.goldenwords.gwandroid.R;
+import ca.goldenwords.gwandroid.events.ToastEvent;
 import ca.goldenwords.gwandroid.fragments.ArticleListFragment;
 import ca.goldenwords.gwandroid.fragments.CurrentIssueFragment;
 import de.greenrobot.event.EventBus;
@@ -21,17 +24,20 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private static final int TYPE_ITEM = 1;
 
     private String mNavTitles[];
+    private int icons[];
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         int Holderid;
 
         TextView textView;
+        ImageView imageView;
 
         public ViewHolder(View itemView,int ViewType) {
             super(itemView);
 
             if(ViewType == TYPE_ITEM) {
                 itemView.setOnClickListener(this);
+                imageView = (ImageView) itemView.findViewById(R.id.navIcon);
                 textView = (TextView) itemView.findViewById(R.id.rowText);
                 Holderid = 1;
             }
@@ -57,8 +63,9 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
     }// class ViewHolder
 
-    public DrawerAdapter(String titles[]){
+    public DrawerAdapter(String titles[],int icons[]){
         mNavTitles = titles;
+        this.icons=icons;
     }
 
     @Override public DrawerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -78,6 +85,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                 int id = R.string.class.getField(mNavTitles[position - 1]).getInt(null);
                 holder.textView.setText(id); // Setting the Text with the array of our Titles
                 holder.textView.setTag(mNavTitles[position - 1]);
+                holder.imageView.setImageResource(icons[position - 1]);
             }catch(NoSuchFieldException ex){
                 ex.printStackTrace();
             }catch(IllegalAccessException ex){

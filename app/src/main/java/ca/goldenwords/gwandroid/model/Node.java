@@ -60,9 +60,9 @@ public class Node {
         node.articleCategoryMachine = GWUtils.parseCategoryMachineName(jo.getJSONObject("article_category").getString("machine_name"));
         node.author = jo.isNull("author") ? null : jo.getString("author");
 
-        node.image_url = jo.getString("image_url");
+        node.image_url = jo.isNull("image_url") ? null : jo.getString("image_url");
         node.video_url = jo.getString("video_url");
-        node.html_content = jo.getString("html_content");
+        node.html_content = jo.isNull("html_content") ? "" : jo.getString("html_content");
 
         node.issue = jo.getString("issue");
         node.volume = jo.getString("volume");

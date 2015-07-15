@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity implements ActionMode.Callba
         // set up drawer
         recyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
-        adapter = new DrawerAdapter(getApplication().getResources().getStringArray(R.array.section_codes));
+        adapter = new DrawerAdapter(getApplication().getResources().getStringArray(R.array.section_codes),
+                new int[] {R.drawable.ic_current,R.drawable.ic_edit,R.drawable.ic_news,R.drawable.ic_random,R.drawable.ic_picture,R.drawable.ic_video,R.drawable.ic_archive,R.drawable.ic_about,R.drawable.ic_mail});
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

@@ -50,12 +50,10 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
         SimpleDateFormat ft = new SimpleDateFormat("MMM d, y");
 
         if(n.cover_image==1){
-            viewHolder.imageProgress.setIndeterminate(true);
-            viewHolder.imageProgress.setVisibility(View.VISIBLE);
             viewHolder.cover_image.setVisibility(View.VISIBLE);
             viewHolder.cover_image.setScaleType(ImageView.ScaleType.CENTER_CROP);
             DataCache.postImageToBus(viewHolder.cover_image, n.image_url);
-        }else viewHolder.cover_image.setVisibility(View.INVISIBLE);
+        }else viewHolder.cover_image.setVisibility(View.GONE);
 
         viewHolder.card_headline.setText(n.title);
         if(type == ListFetcher.Type.ISSUE) {
@@ -84,12 +82,10 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
         protected ImageView cover_image;
         protected View container;
         protected Node nodeData;
-        protected ProgressBar imageProgress;
 
         public NodeViewHolder(View v) {
             super(v);
             v.setOnClickListener(this);
-            imageProgress = (ProgressBar) v.findViewById(R.id.imageProgress);
             card_headline =  (TextView) v.findViewById(R.id.card_headline);
             card_details = (TextView)  v.findViewById(R.id.card_details);
             cover_image = (ImageView) v.findViewById(R.id.cover_image);

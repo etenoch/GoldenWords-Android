@@ -46,14 +46,14 @@ public class DataCache {
             EventBus.getDefault().post(n);
             return;
         }
-        new NodeFetcher(context.getString(R.string.baseurl)+"/article/"+nid).execute();
-
+        if(GWUtils.hasInternet()) new NodeFetcher(context.getString(R.string.baseurl)+"/article/"+nid).execute();
+        else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
     }
 
     // -- Issues --
     public static void postIssueToBus(){
         if(currentIssue >-1 && currentVolume>-1){
-            postIssueToBus(currentVolume,currentIssue);
+            postIssueToBus(currentVolume, currentIssue);
             return;
         }
         postIssueFetcher();

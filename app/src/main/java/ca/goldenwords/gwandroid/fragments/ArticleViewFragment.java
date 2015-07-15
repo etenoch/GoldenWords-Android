@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -17,6 +18,9 @@ import java.util.Date;
 
 import ca.goldenwords.gwandroid.MainActivity;
 import ca.goldenwords.gwandroid.R;
+import ca.goldenwords.gwandroid.data.DataCache;
+import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
+import ca.goldenwords.gwandroid.events.ToastEvent;
 import ca.goldenwords.gwandroid.model.Node;
 import de.greenrobot.event.EventBus;
 
@@ -72,15 +76,25 @@ public class ArticleViewFragment extends Fragment {
     // event bus events
     public void onEvent(Node node){
         this.node = node;
-        ((WebView) fragmentView.findViewById(R.id.webView)).loadDataWithBaseURL(null, node.html_content,"text/html","UTF-8",null);
+        ImageView iv = (ImageView)fragmentView.findViewById(R.id.articleImage);
+        if(node.image_url!=null){
+            iv.setImageResource(R.drawable.ic_placeholder);
+            DataCache.postImageToBus(iv, node.image_url);
+        }else iv.setVisibility(View.GONE);
+        ((WebView) fragmentView.findViewById(R.id.webView)).loadDataWithBaseURL(null, node.html_content, "text/html", "UTF-8", null);
 
         Date time=new java.util.Date((long)node.revision_timestamp*1000);
         SimpleDateFormat ft = new SimpleDateFormat ("MMM d, y");
 
         ((TextView) fragmentView.findViewById(R.id.headline)).setText(node.title);
         ((TextView) fragmentView.findViewById(R.id.author)).setText(node.author);
-        ((TextView) fragmentView.findViewById(R.id.date)).setText("Published on "+ft.format(time));
+        ((TextView) fragmentView.findViewById(R.id.date)).setText("Published on " + ft.format(time));
         ((TextView) fragmentView.findViewById(R.id.section)).setText(node.article_category);
+    }
+
+    public void onEvent(ImageDownloadedEvent e){
+        ImageView iv = e.getImageView();
+        iv.setImageBitmap(e.getImage());
     }
 
 }

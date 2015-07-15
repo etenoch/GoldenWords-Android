@@ -25,12 +25,12 @@ import de.greenrobot.event.EventBus;
 public class ArticleListFragment extends Fragment {
 
     private View fragmentView;
+    private int currentCount=0;
 
     public ArticleListFragment() {}
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         EventBus.getDefault().register(this);
-
         return getPersistentView(inflater,container,savedInstanceState);
     }
 
@@ -39,7 +39,6 @@ public class ArticleListFragment extends Fragment {
             fragmentView = inflater.inflate(R.layout.fragment_article_list, container, false);
 
             String section = getArguments().getString("section");
-//            new ListFetcher(getString(R.string.baseurl)+"/list/"+section, ListFetcher.Type.SECTION).execute();
             DataCache.postSectionToBus(section);
         }
         return fragmentView;

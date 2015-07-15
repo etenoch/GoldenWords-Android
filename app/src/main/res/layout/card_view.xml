@@ -21,21 +21,15 @@
         android:paddingRight="0dp"
         android:paddingTop="0dp">
 
-        <ProgressBar
-            android:layout_marginTop="-6dp"
-            android:paddingTop="0dp"
-            android:id="@+id/imageProgress"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:visibility="invisible"/>
         <ImageView
             android:id="@+id/cover_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds= "true"
-            android:maxHeight="300dp"/>
+            android:adjustViewBounds="true"
+            android:maxHeight="300dp"
+            android:src="@drawable/ic_placeholder"
+            android:visibility="invisible"
+            android:scaleType="fitStart"/>
 
 
         <LinearLayout

@@ -83,7 +83,6 @@ public class CurrentIssueFragment extends Fragment {
     public void onEvent(ImageDownloadedEvent e){
         ImageView iv = e.getImageView();
         iv.setImageBitmap(e.getImage());
-        ((View)iv.getParent()).findViewById(R.id.imageProgress).setVisibility(View.INVISIBLE);
     }
 
 
