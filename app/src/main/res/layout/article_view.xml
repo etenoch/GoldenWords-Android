@@ -17,7 +17,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Headline"
+                android:text="Loading ..."
                 android:id="@+id/headline"
                 android:textStyle="bold"
                 android:textSize="26sp" />
@@ -25,7 +25,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Author"
+                android:text=""
                 android:id="@+id/author"
                 android:layout_below="@+id/headline"
                 android:textStyle="bold" />
@@ -43,7 +43,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Author"
+                android:text=""
                 android:id="@+id/section"
                 android:layout_below="@+id/headline"
                 android:layout_toRightOf="@+id/divider"
@@ -53,7 +53,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Published on ... "
+                android:text=""
                 android:id="@+id/date"
                 android:layout_below="@+id/author" />
         </RelativeLayout>
