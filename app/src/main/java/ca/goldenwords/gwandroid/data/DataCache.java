@@ -2,10 +2,12 @@ package ca.goldenwords.gwandroid.data;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.widget.ImageView;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -35,31 +37,32 @@ public class DataCache {
     private final static HashMap<Integer,Node> nodeCache = new HashMap<>();
     private final static HashMap<String,Bitmap> imageCache = new HashMap<>();
 
+    public final static Set<AsyncTask> downloaderTasks = new HashSet<>();
 
     //=============================//
     //  Post to Bus (or Download)  //
     //=============================//
 
-    public static void postNodeToBus(int nid){
+    public static AsyncTask postNodeToBus(int nid){
         Node n = nodeCache.get(nid);
         if(n!=null) {
             EventBus.getDefault().post(n);
-            return;
+            return null;
         }
-        if(GWUtils.hasInternet()) new NodeFetcher(context.getString(R.string.baseurl)+"/article/"+nid).execute();
+        if(GWUtils.hasInternet()) return new NodeFetcher(context.getString(R.string.baseurl)+"/article/"+nid).execute();
         else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
+        return null;
     }
 
     // -- Issues --
-    public static void postIssueToBus(){
+    public static AsyncTask postIssueToBus(){
         if(currentIssue >-1 && currentVolume>-1){
-            postIssueToBus(currentVolume, currentIssue);
-            return;
+            return postIssueToBus(currentVolume, currentIssue);
         }
-        postIssueFetcher();
+        return postIssueFetcher();
     }
 
-    public static void postIssueToBus(int volume_id,int issue_id){
+    public static AsyncTask postIssueToBus(int volume_id,int issue_id){
         VolumeIssueKey key = new VolumeIssueKey(volume_id,issue_id);
         if(issueVolumeList.get(key)!=null){
             Set<Integer> nodeIdSet = issueVolumeList.get(key);
@@ -68,33 +71,32 @@ public class DataCache {
 
             for(int i:nodeIdSet){
                 Node n = nodeCache.get(i);
-                if(n==null){
-                    postIssueFetcher(volume_id,issue_id);
-                    return;
-                }
+                if(n==null) return postIssueFetcher(volume_id,issue_id);
                 issue.nodes.add(n);
                 issue.issue_id =n.issue_id;
                 issue.volume_id =n.volume_id;
             }
             EventBus.getDefault().post(issue);
-            return;
+            return null;
         }
-        postIssueFetcher(volume_id, issue_id);
+        return postIssueFetcher(volume_id, issue_id);
     }
 
-    private static void postIssueFetcher(int volume,int issue){
+    private static AsyncTask postIssueFetcher(int volume,int issue){
         if(GWUtils.hasInternet())
-            new ListFetcher(context.getString(R.string.baseurl)+"/issue/"+volume+"/"+issue,ListFetcher.Type.ISSUE).execute();
+            return new ListFetcher(context.getString(R.string.baseurl)+"/issue/"+volume+"/"+issue,ListFetcher.Type.ISSUE).execute();
         else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
+        return null;
     }
-    private static void postIssueFetcher(){
+    private static AsyncTask postIssueFetcher(){
         if(GWUtils.hasInternet())
-            new ListFetcher(context.getString(R.string.baseurl)+"/issue",ListFetcher.Type.ISSUE).execute();
+            return new ListFetcher(context.getString(R.string.baseurl)+"/issue",ListFetcher.Type.ISSUE).execute();
         else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
+        return null;
     }
 
     // -- Sections --
-    public static void postSectionToBus(String localShortname) {
+    public static AsyncTask postSectionToBus(String localShortname) {
         Sections enumKey = GWUtils.parseCategoryShortname(localShortname);
         if (sectionCache.get(enumKey) != null) {
             // post first 10
@@ -106,45 +108,48 @@ public class DataCache {
             Node first = section.nodes.iterator().next();
             section.name=first.article_category;
             EventBus.getDefault().post(section);
-            return;
+            return null;
         }
-        postSectionFetcher(localShortname);
+        return postSectionFetcher(localShortname);
     }
 
-    public static void postSectionToBus(String localShortname, int offset){
+    public static AsyncTask postSectionToBus(String localShortname, int offset){
         Sections enumKey = GWUtils.parseCategoryShortname(localShortname);
         if (sectionCache.get(enumKey) != null) {
             // post 10 starting at offset
-            return;
+            return null;
         }
-        postSectionFetcher(localShortname,offset);
+        return postSectionFetcher(localShortname,offset);
     }
 
-    private static void postSectionFetcher(String shortname){
+    private static AsyncTask postSectionFetcher(String shortname){
         if(GWUtils.hasInternet())
-            new ListFetcher(context.getString(R.string.baseurl)+"/list/"+shortname,ListFetcher.Type.SECTION).execute();
+            return new ListFetcher(context.getString(R.string.baseurl)+"/list/"+shortname,ListFetcher.Type.SECTION).execute();
         else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
+        return null;
     }
-    private static void postSectionFetcher(String shortname,int offset){
+    private static AsyncTask postSectionFetcher(String shortname,int offset){
         if(GWUtils.hasInternet())
-            new ListFetcher(context.getString(R.string.baseurl)+"/list/"+shortname+"/"+offset,ListFetcher.Type.SECTION).execute();
+            return new ListFetcher(context.getString(R.string.baseurl)+"/list/"+shortname+"/"+offset,ListFetcher.Type.SECTION).execute();
         else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
+        return null;
     }
 
     // -- Images --
-    public static void postImageToBus(ImageView view,String url){
+    public static AsyncTask postImageToBus(ImageView view,String url){
         Bitmap bmp = imageCache.get(url);
         if(bmp!=null) {
             ImageDownloadedEvent ide = new ImageDownloadedEvent(view,bmp,url);
             EventBus.getDefault().post(ide);
-            return;
+            return null;
         }
-        postImageDownloader(view, url);
+        return postImageDownloader(view, url);
     }
 
-    private static void postImageDownloader(ImageView view,String url){
-        if(GWUtils.hasInternet()) new ImageDownloader(view,url).execute();
+    private static AsyncTask postImageDownloader(ImageView view,String url){
+        if(GWUtils.hasInternet()) return new ImageDownloader(view,url).execute();
         else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
+        return null;
     }
 
 
@@ -200,6 +205,13 @@ public class DataCache {
     //==================//
     //   Other Stuff    //
     //==================//
+
+
+    public static void clearDownloaders(){
+        for(AsyncTask t : downloaderTasks){
+            t.cancel(true);
+        }
+    }
 
     public static void setContext(Context context) {
         DataCache.context = context;

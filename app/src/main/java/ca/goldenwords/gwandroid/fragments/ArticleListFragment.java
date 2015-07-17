@@ -26,6 +26,7 @@ public class ArticleListFragment extends Fragment {
 
     private View fragmentView;
     private int currentCount=0;
+    private boolean dataLoaded = false;
 
     public ArticleListFragment() {}
 
@@ -46,34 +47,38 @@ public class ArticleListFragment extends Fragment {
 
     @Override public void onStop() {
         EventBus.getDefault().unregister(this);
+        DataCache.clearDownloaders();
+        if(!dataLoaded) fragmentView = null;
         super.onStop();
     }
 
     // event bus handler
     // data has loaded
     public void onEvent(Section section){
-        ProgressBar loading_spinner = (ProgressBar)fragmentView.findViewById(R.id.loading_spinner);
+        if(!dataLoaded) {
+            ProgressBar loading_spinner = (ProgressBar) fragmentView.findViewById(R.id.loading_spinner);
 
-        TextView section_header = (TextView)fragmentView.findViewById(R.id.section_header);
-        section_header.setText(section.name);
+            TextView section_header = (TextView) fragmentView.findViewById(R.id.section_header);
+            section_header.setText(section.name);
 
-        RecyclerView recList = (RecyclerView) fragmentView.findViewById(R.id.cards_list);
-        recList.setLayoutManager(new LinearLayoutManager(getActivity()));
+            RecyclerView recList = (RecyclerView) fragmentView.findViewById(R.id.cards_list);
+            recList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        List<Node> nodes = new ArrayList<>();
+            List<Node> nodes = new ArrayList<>();
 
-        NodeAdapter adp = new NodeAdapter(nodes,getActivity(),ListFetcher.Type.SECTION);
+            NodeAdapter adp = new NodeAdapter(nodes, getActivity(), ListFetcher.Type.SECTION);
 
-        // sort Set into List for adapting
-        for (Node s : section.nodes) {
-            nodes.add(s);
+            // sort Set into List for adapting
+            for (Node s : section.nodes) {
+                nodes.add(s);
+            }
+
+            recList.setVisibility(View.VISIBLE);
+            recList.setAdapter(adp);
+            section_header.setVisibility(View.VISIBLE);
+            loading_spinner.setVisibility(View.INVISIBLE);
+            dataLoaded=true;
         }
-
-        recList.setVisibility(View.VISIBLE);
-        recList.setAdapter(adp);
-        section_header.setVisibility(View.VISIBLE);
-        loading_spinner.setVisibility(View.INVISIBLE);
-
     }
 
 }

@@ -1,5 +1,6 @@
 package ca.goldenwords.gwandroid.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,14 +39,15 @@ public class CurrentIssueFragment extends Fragment {
     public View getPersistentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.fragment_current_issue, container, false);
-//            new ListFetcher(getString(R.string.baseurl)+"/issue",ListFetcher.Type.ISSUE).execute();
-            DataCache.postIssueToBus();
+            DataCache.downloaderTasks.add(DataCache.postIssueToBus());
         }
         return fragmentView;
     }
 
     @Override public void onStop() {
         EventBus.getDefault().unregister(this);
+        DataCache.clearDownloaders();
+        if(!dataLoaded) fragmentView = null;
         super.onStop();
     }
 
@@ -53,7 +55,6 @@ public class CurrentIssueFragment extends Fragment {
     // data has loaded
     public void onEvent(Issue currentIssue){
         if(!dataLoaded) {
-            dataLoaded=true;
             ProgressBar loading_spinner = (ProgressBar)fragmentView.findViewById(R.id.loading_spinner);
 
             TextView volume_issue_header = (TextView)fragmentView.findViewById(R.id.volume_issue_header);
@@ -76,6 +77,7 @@ public class CurrentIssueFragment extends Fragment {
             recList.setAdapter(adp);
             volume_issue_header.setVisibility(View.VISIBLE);
             loading_spinner.setVisibility(View.INVISIBLE);
+            dataLoaded=true;
         }
 
     }
