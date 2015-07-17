@@ -102,11 +102,18 @@ public class DataCache {
             // post first 10
             Section section = new Section();
             section.nodes = new TreeSet<>(new RevisionDateComparator());
-            section.nodes.addAll(sectionCache.get(enumKey));  // TODO this doesn't actually post just 10 yet
+
+            int count = 0;
+            for (Node n: sectionCache.get(enumKey)){
+                section.nodes.add(n);
+                count++;
+                if(count>=10) {
+                    section.name = n.article_category;
+                    break;
+                }
+            }
             section.articleCategory=enumKey;
 
-            Node first = section.nodes.iterator().next();
-            section.name=first.article_category;
             EventBus.getDefault().post(section);
             return null;
         }
@@ -116,7 +123,20 @@ public class DataCache {
     public static AsyncTask postSectionToBus(String localShortname, int offset){
         Sections enumKey = GWUtils.parseCategoryShortname(localShortname);
         if (sectionCache.get(enumKey) != null) {
-            // post 10 starting at offset
+
+            Section section = new Section();
+            section.nodes = new TreeSet<>(new RevisionDateComparator());
+            int count = 0;
+            for (Node n: sectionCache.get(enumKey)){
+                if(count > offset) section.nodes.add(n);
+                count++;
+                if(count-offset>=10) {
+                    section.name = n.article_category;
+                    break;
+                }
+            }
+            section.articleCategory=enumKey;
+
             return null;
         }
         return postSectionFetcher(localShortname,offset);
