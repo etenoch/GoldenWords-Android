@@ -79,7 +79,7 @@ public class ArticleViewFragment extends Fragment {
         ImageView iv = (ImageView)fragmentView.findViewById(R.id.articleImage);
         if(node.image_url!=null){
             iv.setImageResource(R.drawable.ic_placeholder);
-            DataCache.postImageToBus(iv, node.image_url);
+            DataCache.downloaderTasks.add(DataCache.postImageToBus(iv, node.image_url));
         }else iv.setVisibility(View.GONE);
         ((WebView) fragmentView.findViewById(R.id.webView)).loadDataWithBaseURL(null, node.html_content, "text/html", "UTF-8", null);
 

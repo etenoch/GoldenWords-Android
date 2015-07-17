@@ -19,15 +19,13 @@ public class NodeFetcher extends AsyncTaskFetcher {
     }
 
     @Override protected void onPostExecute(String result) {
-        if(!isCancelled()){
-            try{
-                Node node = Node.fromJson(result);
-                EventBus.getDefault().post(node);
-            }catch(JSONException e){
-                e.printStackTrace();
-                EventBus.getDefault().post(new ToastEvent("Oops. The dev fucked up :("));
-                // TODO don't be a lazy fuck and handle this error
-            }
+        try{
+            Node node = Node.fromJson(result);
+            if(!isCancelled()) EventBus.getDefault().post(node);
+        }catch(JSONException e){
+            e.printStackTrace();
+            EventBus.getDefault().post(new ToastEvent("Oops. The dev fucked up :("));
+            // TODO don't be a lazy fuck and handle this error
         }
     }
 

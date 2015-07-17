@@ -209,7 +209,7 @@ public class DataCache {
 
     public static void clearDownloaders(){
         for(AsyncTask t : downloaderTasks){
-            t.cancel(true);
+            if(t!=null) t.cancel(true);
         }
     }
 

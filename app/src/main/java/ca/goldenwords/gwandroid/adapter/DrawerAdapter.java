@@ -58,7 +58,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                 args.putString("section", section.toString());
                 fragment.setArguments(args);
             }
-            EventBus.getDefault().post(fragment);
+            if(fragment!=null) EventBus.getDefault().post(fragment);
         }
 
     }// class ViewHolder

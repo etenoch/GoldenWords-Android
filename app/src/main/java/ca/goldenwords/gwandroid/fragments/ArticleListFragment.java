@@ -40,7 +40,7 @@ public class ArticleListFragment extends Fragment {
             fragmentView = inflater.inflate(R.layout.fragment_article_list, container, false);
 
             String section = getArguments().getString("section");
-            DataCache.postSectionToBus(section);
+            DataCache.downloaderTasks.add(DataCache.postSectionToBus(section));
         }
         return fragmentView;
     }
@@ -49,6 +49,7 @@ public class ArticleListFragment extends Fragment {
         EventBus.getDefault().unregister(this);
         DataCache.clearDownloaders();
         if(!dataLoaded) fragmentView = null;
+        dataLoaded = false;
         super.onStop();
     }
 

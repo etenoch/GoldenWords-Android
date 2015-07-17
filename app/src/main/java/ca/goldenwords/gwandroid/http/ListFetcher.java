@@ -24,21 +24,20 @@ public class ListFetcher extends AsyncTaskFetcher {
     }
 
     @Override protected void onPostExecute(String result) {
-        if(!isCancelled()){
-            try{
-                if(type == Type.ISSUE){
-                    Issue issue = Issue.fromJson(result,true);
-                    if(!isCancelled()) EventBus.getDefault().post(issue);
-                }else if (type==Type.SECTION){
-                    Section section = Section.fromJson(result,true);
-                    if(!isCancelled()) EventBus.getDefault().post(section);
-                }
-            }catch(JSONException e){
-                e.printStackTrace();
-                EventBus.getDefault().post(new ToastEvent("Oops. The dev fucked up :("));
-                // TODO god dammit Enoch, don't be a lazy fuck and handle this error properly
+        try{
+            if(type == Type.ISSUE){
+                Issue issue = Issue.fromJson(result,true);
+                if(!isCancelled()) EventBus.getDefault().post(issue);
+            }else if (type==Type.SECTION){
+                Section section = Section.fromJson(result,true);
+                if(!isCancelled()) EventBus.getDefault().post(section);
             }
+        }catch(JSONException e){
+            e.printStackTrace();
+            EventBus.getDefault().post(new ToastEvent("Oops. The dev fucked up :("));
+            // TODO god dammit Enoch, don't be a lazy fuck and handle this error properly
         }
+
     }
 
 }

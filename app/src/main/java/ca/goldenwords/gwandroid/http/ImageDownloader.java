@@ -37,9 +37,7 @@ public class ImageDownloader extends AsyncTask<Void, Void, Bitmap> {
     }
 
     protected void onPostExecute(Bitmap result) {
-        if(!isCancelled()){
-            ImageDownloadedEvent ide = new ImageDownloadedEvent(imageView,result,url,true);
-            EventBus.getDefault().post(ide);
-        }
+        ImageDownloadedEvent ide = new ImageDownloadedEvent(imageView,result,url,true);
+        if(!isCancelled()) EventBus.getDefault().post(ide);
     }
 }

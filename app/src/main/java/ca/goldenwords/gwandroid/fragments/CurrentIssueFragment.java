@@ -48,6 +48,7 @@ public class CurrentIssueFragment extends Fragment {
         EventBus.getDefault().unregister(this);
         DataCache.clearDownloaders();
         if(!dataLoaded) fragmentView = null;
+        dataLoaded = false;
         super.onStop();
     }
 

@@ -52,7 +52,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
         if(n.cover_image==1){
             viewHolder.cover_image.setVisibility(View.VISIBLE);
             viewHolder.cover_image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            DataCache.postImageToBus(viewHolder.cover_image, n.image_url);
+            DataCache.downloaderTasks.add(DataCache.postImageToBus(viewHolder.cover_image, n.image_url));
         }else viewHolder.cover_image.setVisibility(View.GONE);
 
         viewHolder.card_headline.setText(n.title);
