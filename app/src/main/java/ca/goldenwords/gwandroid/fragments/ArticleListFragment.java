@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.util.List;
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.NodeAdapter;
 import ca.goldenwords.gwandroid.data.DataCache;
+import ca.goldenwords.gwandroid.events.ToastEvent;
 import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.model.Node;
 import ca.goldenwords.gwandroid.model.Section;
@@ -27,6 +29,18 @@ public class ArticleListFragment extends Fragment {
     private View fragmentView;
     private int currentCount=0;
     private boolean dataLoaded = false;
+    private String section;
+
+    // endless recyler view stuff
+    private boolean okToFetchMore = true;
+    private int pastVisiblesItems, visibleItemCount, totalItemCount;
+
+    ProgressBar loading_spinner;
+    TextView section_header;
+    RecyclerView recList;
+    LinearLayoutManager llm;
+    List<Node> nodes;
+    NodeAdapter adp;
 
     public ArticleListFragment() {}
 
@@ -39,7 +53,7 @@ public class ArticleListFragment extends Fragment {
         if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.fragment_article_list, container, false);
 
-            String section = getArguments().getString("section");
+            section = getArguments().getString("section");
             DataCache.downloaderTasks.add(DataCache.postSectionToBus(section));
         }
         return fragmentView;
@@ -56,22 +70,39 @@ public class ArticleListFragment extends Fragment {
     // event bus handler
     // data has loaded
     public void onEvent(Section section){
+        final String sectionShortName = this.section;
         if(!dataLoaded) {
-            ProgressBar loading_spinner = (ProgressBar) fragmentView.findViewById(R.id.loading_spinner);
+            loading_spinner = (ProgressBar) fragmentView.findViewById(R.id.loading_spinner);
+            section_header = (TextView) fragmentView.findViewById(R.id.section_header);
+            recList = (RecyclerView) fragmentView.findViewById(R.id.cards_list);
+            llm = new LinearLayoutManager(getActivity());
 
-            TextView section_header = (TextView) fragmentView.findViewById(R.id.section_header);
             section_header.setText(section.name);
+            recList.setLayoutManager(llm);
 
-            RecyclerView recList = (RecyclerView) fragmentView.findViewById(R.id.cards_list);
-            recList.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recList.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
-            List<Node> nodes = new ArrayList<>();
-
-            NodeAdapter adp = new NodeAdapter(nodes, getActivity(), ListFetcher.Type.SECTION);
+                    visibleItemCount = llm.getChildCount();
+                    totalItemCount = llm.getItemCount();
+                    pastVisiblesItems = llm.findFirstVisibleItemPosition();
+                    if(okToFetchMore){
+                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                            EventBus.getDefault().post(new ToastEvent("Loading more items"));
+                            okToFetchMore = false;
+                            DataCache.downloaderTasks.add(DataCache.postSectionToBus(sectionShortName, currentCount + 1));
+                        }
+                    }
+                }
+            });
+            nodes = new ArrayList<>();
+            adp = new NodeAdapter(nodes, getActivity(), ListFetcher.Type.SECTION);
 
             // sort Set into List for adapting
             for (Node s : section.nodes) {
                 nodes.add(s);
+                currentCount++;
             }
 
             recList.setVisibility(View.VISIBLE);
@@ -79,6 +110,15 @@ public class ArticleListFragment extends Fragment {
             section_header.setVisibility(View.VISIBLE);
             loading_spinner.setVisibility(View.INVISIBLE);
             dataLoaded=true;
+        }else{ // load more
+            for (Node s : section.nodes) {
+                if(!nodes.contains(s)) {
+                    nodes.add(s);
+                    currentCount++;
+                }
+            }
+            adp.notifyDataSetChanged();
+            okToFetchMore = true;
         }
     }
 

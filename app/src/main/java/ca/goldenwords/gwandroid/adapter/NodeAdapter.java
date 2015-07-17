@@ -70,10 +70,11 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
     @Override public NodeViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view, viewGroup, false);
         NodeViewHolder viewHolder =new NodeViewHolder(itemView);
-        if(type== ListFetcher.Type.ISSUE)viewHolder.setIsRecyclable(false);
+        //if(type== ListFetcher.Type.ISSUE)
+        viewHolder.setIsRecyclable(false);
         return viewHolder;
     }
-    
+
 
     // ViewHolder Class
     public class NodeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

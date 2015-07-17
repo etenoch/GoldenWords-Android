@@ -122,8 +122,7 @@ public class DataCache {
 
     public static AsyncTask postSectionToBus(String localShortname, int offset){
         Sections enumKey = GWUtils.parseCategoryShortname(localShortname);
-        if (sectionCache.get(enumKey) != null) {
-
+        if (sectionCache.get(enumKey) != null && sectionCache.get(enumKey).size()>=offset+10) {
             Section section = new Section();
             section.nodes = new TreeSet<>(new RevisionDateComparator());
             int count = 0;
@@ -136,7 +135,7 @@ public class DataCache {
                 }
             }
             section.articleCategory=enumKey;
-
+            EventBus.getDefault().post(section);
             return null;
         }
         return postSectionFetcher(localShortname,offset);
