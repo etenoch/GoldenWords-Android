@@ -1,5 +1,9 @@
 package ca.goldenwords.gwandroid.fragments;
 
 
-public class LocationsFragment {
+import android.app.Fragment;
+
+public class LocationsFragment extends Fragment {
+
+
 }

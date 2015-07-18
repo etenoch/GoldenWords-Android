@@ -1,5 +1,7 @@
 package ca.goldenwords.gwandroid.model;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,8 +76,8 @@ public class Node {
         if(m.find()) node.volume_id = Integer.parseInt(m.group(1));
         else throw new JSONException("Couldn't get Issue ID");
 
-        node.cover_image = jo.getInt("cover_image");
-        node.slider_item = jo.getInt("slider_item");
+        node.cover_image = jo.isNull("cover_image") ? 0 : jo.getInt("cover_image");
+        node.slider_item = jo.isNull("cover_image") ? 0 : jo.getInt("slider_item");
 
         node.disqusIdentifier = jo.getJSONObject("disqus").getString("identifier");
 
