@@ -7,6 +7,7 @@
         <item>random</item>
         <item>pictures</item>
         <item>videos</item>
+        <item>locations</item>
         <item>archive</item>
         <item>about</item>
         <item>contact</item>
@@ -20,7 +21,7 @@
     <string name="random">Random</string>
     <string name="pictures">Pictures</string>
     <string name="videos">Videos</string>
-
+    <string name="locations">Find a Paper</string>
     <string name="archive">Issue Archive</string>
     <string name="about">About Golden Words</string>
     <string name="contact">Contact Us</string>

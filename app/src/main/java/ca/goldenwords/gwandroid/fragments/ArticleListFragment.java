@@ -89,7 +89,7 @@ public class ArticleListFragment extends Fragment {
                     pastVisiblesItems = llm.findFirstVisibleItemPosition();
                     if(okToFetchMore){
                         if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                            EventBus.getDefault().post(new ToastEvent("Loading more items"));
+                            EventBus.getDefault().post(new ToastEvent("Loading more items",false));
                             okToFetchMore = false;
                             DataCache.downloaderTasks.add(DataCache.postSectionToBus(sectionShortName, currentCount + 1));
                         }

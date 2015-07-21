@@ -129,7 +129,7 @@ public class DataCache {
             for (Node n: sectionCache.get(enumKey)){
                 if(count > offset) section.nodes.add(n);
                 count++;
-                if(count-offset>=10) {
+                if(count-offset>10) {
                     section.name = n.article_category;
                     break;
                 }

@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements ActionMode.Callba
                         R.drawable.ic_random,
                         R.drawable.ic_picture,
                         R.drawable.ic_video,
+                        R.drawable.ic_map,
                         R.drawable.ic_archive,
                         R.drawable.ic_about,
                         R.drawable.ic_mail});
