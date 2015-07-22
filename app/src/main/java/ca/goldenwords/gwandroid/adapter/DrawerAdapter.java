@@ -14,8 +14,11 @@ import android.widget.TextView;
 
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.events.ToastEvent;
+import ca.goldenwords.gwandroid.fragments.AboutUsFragment;
 import ca.goldenwords.gwandroid.fragments.ArticleListFragment;
+import ca.goldenwords.gwandroid.fragments.ContactUsFragment;
 import ca.goldenwords.gwandroid.fragments.CurrentIssueFragment;
+import ca.goldenwords.gwandroid.fragments.IssueArchiveFragment;
 import ca.goldenwords.gwandroid.fragments.LocationsFragment;
 import ca.goldenwords.gwandroid.fragments.PictureListFragment;
 import ca.goldenwords.gwandroid.fragments.VideoListFragment;
@@ -66,6 +69,12 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                 fragment = new VideoListFragment();
             else if(section.toString().equals("locations"))
                 fragment = new LocationsFragment();
+            else if(section.toString().equals("about"))
+                fragment = new AboutUsFragment();
+            else if(section.toString().equals("contact"))
+                fragment = new ContactUsFragment();
+            else if(section.toString().equals("archive"))
+                fragment = new IssueArchiveFragment();
 
             if(fragment!=null) EventBus.getDefault().post(fragment);
         }

@@ -1,5 +1,7 @@
 package ca.goldenwords.gwandroid.fragments;
 
 
-public class IssueArchiveFragment {
+import android.support.v4.app.Fragment;
+
+public class IssueArchiveFragment extends Fragment{
 }

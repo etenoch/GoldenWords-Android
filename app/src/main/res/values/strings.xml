@@ -1,6 +1,9 @@
 <resources>
     <string name="baseurl">http://goldenwords.ca/api/get</string>
 
+    <string name="abouturl">http://goldenwords.ca/node/9.json</string>
+    <string name="contactus">http://goldenwords.ca/node/10.json</string>
+
     <string name="app_name">Golden Words</string>
     <string name="goldenwords">Golden Words</string>
     <string name="action_settings">Settings</string>
