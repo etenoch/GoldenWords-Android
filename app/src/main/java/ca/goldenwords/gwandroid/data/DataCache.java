@@ -3,6 +3,7 @@ package ca.goldenwords.gwandroid.data;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.LruCache;
 import android.widget.ImageView;
 
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.TreeSet;
 
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
+import ca.goldenwords.gwandroid.events.StringWrapperEvent;
 import ca.goldenwords.gwandroid.events.ToastEvent;
 import ca.goldenwords.gwandroid.http.ImageDownloader;
 import ca.goldenwords.gwandroid.http.ListFetcher;
@@ -35,7 +37,8 @@ public class DataCache {
     private final static HashMap<VolumeIssueKey,Set<Integer>> issueVolumeList = new HashMap<>();
     private final static HashMap<Sections,TreeSet<Node>> sectionCache = new HashMap<>();
     private final static HashMap<Integer,Node> nodeCache = new HashMap<>();
-    private final static HashMap<String,Bitmap> imageCache = new HashMap<>();
+//    private final static HashMap<String,Bitmap> imageCache = new HashMap<>();
+    public final static LruCache<String,Bitmap> imageCache = new LruCache<>(10);
 
     public final static Set<AsyncTask> downloaderTasks = new HashSet<>();
 

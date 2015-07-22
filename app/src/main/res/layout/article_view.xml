@@ -63,7 +63,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:scaleType="fitStart"/>
+            android:scaleType="fitStart"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
 
         <WebView
             android:layout_width="match_parent"
