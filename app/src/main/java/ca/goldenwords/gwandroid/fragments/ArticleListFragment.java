@@ -35,12 +35,12 @@ public class ArticleListFragment extends Fragment {
     private boolean okToFetchMore = true;
     private int pastVisiblesItems, visibleItemCount, totalItemCount;
 
-    ProgressBar loading_spinner;
-    TextView section_header;
-    RecyclerView recList;
-    LinearLayoutManager llm;
-    List<Node> nodes;
-    NodeAdapter adp;
+    private ProgressBar loading_spinner;
+    private TextView section_header;
+    private RecyclerView recList;
+    private LinearLayoutManager llm;
+    private List<Node> nodes;
+    private NodeAdapter adp;
 
     public ArticleListFragment() {}
 
