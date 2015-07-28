@@ -8,14 +8,13 @@ import android.widget.ImageView;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
-import ca.goldenwords.gwandroid.events.StringWrapperEvent;
 import ca.goldenwords.gwandroid.events.ToastEvent;
+import ca.goldenwords.gwandroid.http.GenericFetcher;
 import ca.goldenwords.gwandroid.http.ImageDownloader;
 import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.http.NodeFetcher;
@@ -170,6 +169,14 @@ public class DataCache {
 
     private static AsyncTask postImageDownloader(ImageView view,String url){
         if(GWUtils.hasInternet()) return new ImageDownloader(view,url).execute();
+        else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
+        return null;
+    }
+
+    // -- Locations --
+    public static AsyncTask postLocations(){
+        if(GWUtils.hasInternet())
+            return new GenericFetcher(context.getString(R.string.baseurl)+"/locations").execute();
         else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
         return null;
     }
