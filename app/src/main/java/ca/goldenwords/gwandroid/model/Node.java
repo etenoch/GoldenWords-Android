@@ -71,10 +71,8 @@ public class Node {
         Pattern p = Pattern.compile("\\w+\\s(\\d+)");
         Matcher m = p.matcher(node.issue);
         if(m.find()) node.issue_id = Integer.parseInt(m.group(1));
-        else throw new JSONException("Couldn't get Issue ID");
         m = p.matcher(node.volume);
         if(m.find()) node.volume_id = Integer.parseInt(m.group(1));
-        else throw new JSONException("Couldn't get Issue ID");
 
         node.cover_image = jo.isNull("cover_image") ? 0 : jo.getInt("cover_image");
         node.slider_item = jo.isNull("cover_image") ? 0 : jo.getInt("slider_item");
