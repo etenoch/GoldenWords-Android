@@ -66,7 +66,7 @@ public class CurrentIssueFragment extends Fragment {
 
             List<Node> nodes = new ArrayList<>();
 
-            NodeAdapter adp = new NodeAdapter(nodes,getActivity(),ListFetcher.Type.ISSUE);
+            NodeAdapter adp = new NodeAdapter(nodes,getActivity(),ListFetcher.Type.ISSUE,this);
 
             // sort HashMap into List for adapting
             for (Node s : currentIssue.nodes) {

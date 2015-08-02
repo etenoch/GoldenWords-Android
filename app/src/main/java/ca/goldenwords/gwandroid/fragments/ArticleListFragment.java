@@ -97,7 +97,7 @@ public class ArticleListFragment extends Fragment {
                 }
             });
             nodes = new ArrayList<>();
-            adp = new NodeAdapter(nodes, getActivity(), ListFetcher.Type.SECTION);
+            adp = new NodeAdapter(nodes, getActivity(), ListFetcher.Type.SECTION,this);
 
             // sort Set into List for adapting
             for (Node s : section.nodes) {

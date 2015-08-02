@@ -32,10 +32,13 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
     private ListFetcher.Type type;
     HashMap<Integer,NodeViewHolder> persistentViews = new HashMap<>();
 
-    public NodeAdapter(List<Node> nodeList,Context c,ListFetcher.Type type){
+    Fragment theFragment;
+
+    public NodeAdapter(List<Node> nodeList,Context c,ListFetcher.Type type,Fragment theFragment){
         this.nodeList = nodeList;
         this.context = c;
         this.type=type;
+        this.theFragment=theFragment;
     }
 
     @Override public int getItemCount() {
@@ -100,7 +103,8 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
         @Override public void onClick(View view) {
             Fragment fragment = new ArticleViewFragment();
             FragmentTransaction ft = ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment_container, fragment);
+            ft.hide(theFragment);
+            ft.add(R.id.fragment_container, fragment);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.addToBackStack(null);
             ft.commit();

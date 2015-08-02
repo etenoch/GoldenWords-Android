@@ -32,17 +32,17 @@ public class LocationsFragment extends Fragment implements OnMapReadyCallback{
     private MapFragment mMapFragment;
     private GoogleMap map;
 
+    private JSONArray locations;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentView = inflater.inflate(R.layout.fragment_map_locations, container, false);
         EventBus.getDefault().register(this);
+        DataCache.postLocations();
 
         mMapFragment = MapFragment.newInstance();
         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.map, mMapFragment);
         fragmentTransaction.commit();
-
-        mMapFragment.getMapAsync(this);
 
         return fragmentView;
     }
@@ -55,20 +55,27 @@ public class LocationsFragment extends Fragment implements OnMapReadyCallback{
     public void onMapReady(GoogleMap map){
         this.map = map;
         map.setMyLocationEnabled(true);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(44.22838027067406,-76.49507761001587), 15));
-        DataCache.postLocations();
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(44.22838027067406, -76.49507761001587), 16));
+
+        try{
+            JSONObject obj;
+            JSONArray coor;
+            for(int i = 0; i<locations.length();i++){
+                obj = locations.getJSONObject(i);
+                coor = obj.getJSONArray("coordinates");
+                map.addMarker(new MarkerOptions().position(new LatLng(coor.getDouble(1), coor.getDouble(0))).title(obj.getString("name")));
+            }
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+
     }
 
     public void onEvent(StringWrapperEvent string){
         try{
-            JSONArray arr = new JSONArray(string.getData());
-            JSONObject obj;
-            JSONArray coor;
-            for(int i = 0; i<arr.length();i++){
-                obj = arr.getJSONObject(i);
-                coor = obj.getJSONArray("coordinates");
-                map.addMarker(new MarkerOptions().position(new LatLng(coor.getDouble(1), coor.getDouble(0))).title(obj.getString("name")));
-            }
+            locations = new JSONArray(string.getData());
+
+            mMapFragment.getMapAsync(this);
 
         }catch(JSONException e){
             e.printStackTrace();
