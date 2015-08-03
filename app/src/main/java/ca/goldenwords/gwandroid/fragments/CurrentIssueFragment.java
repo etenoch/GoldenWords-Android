@@ -1,33 +1,48 @@
 package ca.goldenwords.gwandroid.fragments;
 
-import android.os.AsyncTask;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.NodeAdapter;
 import ca.goldenwords.gwandroid.data.DataCache;
 import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
+import ca.goldenwords.gwandroid.events.ToastEvent;
+import ca.goldenwords.gwandroid.events.VolumeIssueListEvent;
+import ca.goldenwords.gwandroid.http.GenericFetcher;
 import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.model.Issue;
 import ca.goldenwords.gwandroid.model.Node;
+import ca.goldenwords.gwandroid.utils.VolumeIssueKey;
 import de.greenrobot.event.EventBus;
 
 public class CurrentIssueFragment extends Fragment {
 
     private View fragmentView;
     private boolean dataLoaded = false;
+
+    private TextView header;
+    private AlertDialog.Builder dialogBuilder;
 
     public CurrentIssueFragment() {}
 
@@ -37,10 +52,53 @@ public class CurrentIssueFragment extends Fragment {
     }
 
     public View getPersistentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (fragmentView == null) {
+        if (fragmentView == null || header == null) {
             fragmentView = inflater.inflate(R.layout.fragment_current_issue, container, false);
-            DataCache.downloaderTasks.add(DataCache.postIssueToBus());
+
+            header = (TextView) fragmentView.findViewById(R.id.volume_issue_header);
+
+            dialogBuilder = new AlertDialog.Builder(getActivity());
+            dialogBuilder.setIcon(R.mipmap.ic_launcher);
+            dialogBuilder.setTitle("Volumes and Issues");
+
+            dialogBuilder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            new GenericFetcher(getActivity().getString(R.string.vi_list)){
+
+                @Override protected void onPostExecute(String result) {
+                    VolumeIssueListEvent vile = new VolumeIssueListEvent();
+
+                    try{
+                        JSONArray vList = new JSONArray(result);
+                        JSONObject vol;
+
+                        for(int i=0;i<vList.length();i++){
+                            vol = vList.getJSONObject(i);
+
+                            int vid = vol.getInt("Volume");
+                            ArrayList<Integer> issues = new ArrayList<Integer>();
+
+                            for (int j=0;j<vol.getJSONArray("Issues").length();j++) issues.add(vol.getJSONArray("Issues").getInt(j));
+
+                            vile.addVolume(vid,issues);
+                        }
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+
+                    EventBus.getDefault().post(vile);
+                }
+            }.execute();
+
+            if(getArguments()==null) DataCache.downloaderTasks.add(DataCache.postIssueToBus());
+            else DataCache.downloaderTasks.add(DataCache.postIssueToBus(getArguments().getInt("volume",0),getArguments().getInt("issue",0)));
         }
+
         return fragmentView;
     }
 
@@ -81,6 +139,46 @@ public class CurrentIssueFragment extends Fragment {
             dataLoaded=true;
         }
 
+    }
+
+    public void onEvent(VolumeIssueListEvent e){
+
+        final HashMap<Integer,VolumeIssueKey> orderedKeys = new HashMap<>();
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(),android.R.layout.select_dialog_item);
+
+        int i = 0;
+        for (int vid : e.getVolumeIssueListMap().keySet()){
+            for(int issue: e.getVolumeIssueListMap().get(vid)){
+                arrayAdapter.add(" Volume "+vid+" - Issue "+issue);
+                orderedKeys.put(i,new VolumeIssueKey(vid,issue));
+                i++;
+            }
+        }
+
+        dialogBuilder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                VolumeIssueKey vi = orderedKeys.get(which);
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("volume", vi.getVolume());
+                bundle.putInt("issue",vi.getIssue());
+
+                CurrentIssueFragment newIssue = new CurrentIssueFragment();
+                newIssue.setArguments(bundle);
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.replace(R.id.fragment_container, newIssue).commit();
+
+                dialog.dismiss();
+            }
+        });
+
+        header.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                dialogBuilder.show();
+            }
+        });
     }
 
     public void onEvent(ImageDownloadedEvent e){

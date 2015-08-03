@@ -24,4 +24,11 @@ public class VolumeIssueKey {
         return result;
     }
 
+    public int getVolume() {
+        return volume;
+    }
+
+    public int getIssue() {
+        return issue;
+    }
 }
