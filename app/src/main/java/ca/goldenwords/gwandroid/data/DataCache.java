@@ -33,6 +33,7 @@ public class DataCache {
 
     private static int currentVolume=-1;
     private static int currentIssue=-1;
+    private final static HashSet<VolumeIssueKey> fullIssue = new HashSet<>();
     private final static HashMap<VolumeIssueKey,Set<Integer>> issueVolumeList = new HashMap<>();
     private final static HashMap<Sections,TreeSet<Node>> sectionCache = new HashMap<>();
     private final static HashMap<Integer,Node> nodeCache = new HashMap<>();
@@ -66,7 +67,7 @@ public class DataCache {
 
     public static AsyncTask postIssueToBus(int volume_id,int issue_id){
         VolumeIssueKey key = new VolumeIssueKey(volume_id,issue_id);
-        if(issueVolumeList.get(key)!=null){
+        if(issueVolumeList.get(key)!=null && fullIssue.contains(key)){
             Set<Integer> nodeIdSet = issueVolumeList.get(key);
             Issue issue = new Issue();
             issue.nodes = new HashSet<>();
@@ -213,6 +214,10 @@ public class DataCache {
             l.add(nid);
             issueVolumeList.put(key,l);
         }
+    }
+
+    public static void trackFullIssue(VolumeIssueKey key){
+        fullIssue.add(key);
     }
 
     public static void addToCache(Section section){

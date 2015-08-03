@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import ca.goldenwords.gwandroid.data.DataCache;
+import ca.goldenwords.gwandroid.utils.VolumeIssueKey;
+
 public class Issue {
     public String jsonString;
     public Set<Node> nodes;
@@ -42,6 +45,8 @@ public class Issue {
         n =issue.nodes.iterator().next();
         issue.issue_id =n.issue_id;
         issue.volume_id =n.volume_id;
+
+        if(addToCache) DataCache.trackFullIssue(new VolumeIssueKey(n.volume_id,n.issue_id));
 
         return issue;
     }
