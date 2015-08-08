@@ -70,10 +70,6 @@ public class PictureListFragment extends Fragment{
         list.add(ii);
         gridAdapter.notifyDataSetChanged();
 
-//        if(list.size()>=section.nodes.size()){
-//            fragmentView.findViewById(R.id.loading_spinner).setVisibility(View.INVISIBLE);
-//
-//        }
     }
 
 

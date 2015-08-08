@@ -26,6 +26,7 @@ public class ImageDownloadedEvent {
     }
 
     public void setImage(Bitmap image) {
+        /*
         final int maxSize = 850;
         int outWidth;
         int outHeight;
@@ -40,6 +41,8 @@ public class ImageDownloadedEvent {
         }
 
         this.image = Bitmap.createScaledBitmap(image, outWidth, outHeight, false);
+        */
+        this.image = image;
     }
 
     public ImageView getImageView() {

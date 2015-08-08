@@ -20,7 +20,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cards_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
         android:paddingLeft="0dp"
         android:paddingRight="0dp"
         android:paddingBottom="0dp"
@@ -31,6 +31,21 @@
         android:visibility="invisible">
 
     </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/loadMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tap to Load More"
+        android:layout_alignParentBottom="true"
+        android:padding="12dp"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:translationY="48dp"
+        android:clickable="true"
+        android:layout_margin="4dp"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold" />
 
     <ProgressBar
         android:id="@+id/loading_spinner"
