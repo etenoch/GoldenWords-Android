@@ -51,14 +51,16 @@ public class PictureListFragment extends Fragment{
         this.section = section;
         nodeTracker = new HashMap<>();
         list = new ArrayList<>();
+
+        gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, list);
+        gridView.setAdapter(gridAdapter);
+
         for (Node s : section.nodes) {
             if(s.image_url!=null){
                 nodeTracker.put(s.image_url,s);
                 DataCache.downloaderTasks.add(DataCache.postImageToBus(null, s.image_url));
             }
         }
-        gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, list);
-        gridView.setAdapter(gridAdapter);
 
         fragmentView.findViewById(R.id.loading_spinner).setVisibility(View.INVISIBLE);
     }

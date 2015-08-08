@@ -17,7 +17,7 @@ public class ImageDownloadedEvent {
 
     public ImageDownloadedEvent(ImageView imageView, Bitmap image,String url) {
         this.imageView = imageView;
-        this.image = image;
+        setImage(image);
         this.url = url;
     }
 
@@ -26,7 +26,20 @@ public class ImageDownloadedEvent {
     }
 
     public void setImage(Bitmap image) {
-        this.image = image;
+        final int maxSize = 850;
+        int outWidth;
+        int outHeight;
+        int inWidth = image.getWidth();
+        int inHeight = image.getHeight();
+        if(inWidth > inHeight){
+            outWidth = maxSize;
+            outHeight = (inHeight * maxSize) / inWidth;
+        } else {
+            outHeight = maxSize;
+            outWidth = (inWidth * maxSize) / inHeight;
+        }
+
+        this.image = Bitmap.createScaledBitmap(image, outWidth, outHeight, false);
     }
 
     public ImageView getImageView() {
