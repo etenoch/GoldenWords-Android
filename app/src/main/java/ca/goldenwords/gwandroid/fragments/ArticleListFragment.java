@@ -40,6 +40,7 @@ public class ArticleListFragment extends Fragment {
     private int pastVisiblesItems, visibleItemCount, totalItemCount;
 
     private ProgressBar loading_spinner;
+    private ProgressBar loading_bar;
     private TextView section_header;
     private RecyclerView recList;
     private LinearLayoutManager llm;
@@ -47,6 +48,8 @@ public class ArticleListFragment extends Fragment {
     private NodeAdapter adp;
 
     Button loadMore;
+    DisplayMetrics displayMetrics;
+    int px;
 
     public ArticleListFragment() {}
 
@@ -60,9 +63,17 @@ public class ArticleListFragment extends Fragment {
             fragmentView = inflater.inflate(R.layout.fragment_article_list, container, false);
             section = getArguments().getString("section");
 
+            loading_spinner = (ProgressBar) fragmentView.findViewById(R.id.loading_spinner);
+            loading_bar = (ProgressBar) fragmentView.findViewById(R.id.loading_bar);
+
+            displayMetrics = getActivity().getResources().getDisplayMetrics();
+            px = Math.round(48 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+
             loadMore = (Button)fragmentView.findViewById(R.id.loadMore);
             loadMore.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
+                    loading_bar.setVisibility(View.VISIBLE);
+                    loadMore.animate().translationY(px);
                     EventBus.getDefault().post(new ToastEvent("Loading more items",false));
                     okToFetchMore = false;
                     DataCache.downloaderTasks.add(DataCache.postSectionToBus(section, currentCount + 1));
@@ -87,11 +98,9 @@ public class ArticleListFragment extends Fragment {
     public void onEvent(Section section){
         final String sectionShortName = this.section;
         if(!dataLoaded) {
-            loading_spinner = (ProgressBar) fragmentView.findViewById(R.id.loading_spinner);
             section_header = (TextView) fragmentView.findViewById(R.id.section_header);
             recList = (RecyclerView) fragmentView.findViewById(R.id.cards_list);
             llm = new LinearLayoutManager(getActivity());
-
 
             section_header.setText(section.name);
             recList.setLayoutManager(llm);
@@ -103,14 +112,8 @@ public class ArticleListFragment extends Fragment {
                     totalItemCount = llm.getItemCount();
                     pastVisiblesItems = llm.findFirstVisibleItemPosition();
                     if(okToFetchMore){
-                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount){
-                            loadMore.animate().translationY(0);
-                        }
-                        else{
-                            DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
-                            int px = Math.round(48 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-                            loadMore.animate().translationY(px);
-                        }
+                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) loadMore.animate().translationY(0);
+                        else loadMore.animate().translationY(px);
                     }
 
                 }
@@ -139,6 +142,7 @@ public class ArticleListFragment extends Fragment {
                 }
             }
             adp.notifyDataSetChanged();
+            loading_bar.setVisibility(View.INVISIBLE);
             okToFetchMore = true;
         }
     }
