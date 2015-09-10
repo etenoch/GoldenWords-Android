@@ -3,6 +3,7 @@ package ca.goldenwords.gwandroid.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,9 +41,22 @@ public class GridViewAdapter extends ArrayAdapter {
             row.setTag(holder);
         } else holder = (ViewHolder) row.getTag();
 
-
         ImageItem item = data.get(position);
-        holder.image.setImageBitmap(item.getImage());
+
+        final int maxSize = 450;
+        int outWidth;
+        int outHeight;
+        int inWidth = item.getImage().getWidth();
+        int inHeight = item.getImage().getHeight();
+        if(inWidth > inHeight){
+            outWidth = maxSize;
+            outHeight = (inHeight * maxSize) / inWidth;
+        } else {
+            outHeight = maxSize;
+            outWidth = (inWidth * maxSize) / inHeight;
+        }
+
+        holder.image.setImageBitmap(Bitmap.createScaledBitmap(item.getImage(), outWidth, outHeight, false));
         return row;
     }
 

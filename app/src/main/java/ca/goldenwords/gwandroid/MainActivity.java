@@ -1,5 +1,7 @@
 package ca.goldenwords.gwandroid;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -15,10 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import ca.goldenwords.gwandroid.adapter.DrawerAdapter;
 import ca.goldenwords.gwandroid.data.DataCache;
 import ca.goldenwords.gwandroid.events.ToastEvent;
+import ca.goldenwords.gwandroid.fragments.ArticleViewFragment;
 import ca.goldenwords.gwandroid.fragments.CurrentIssueFragment;
+import ca.goldenwords.gwandroid.http.NodeFetcher;
 import ca.goldenwords.gwandroid.utils.GWUtils;
 import de.greenrobot.event.EventBus;
 
@@ -37,6 +44,10 @@ public class MainActivity extends AppCompatActivity implements ActionMode.Callba
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        Uri url = intent.getData();
 
         GWUtils.setContext(this);
         DataCache.setContext(this);
@@ -81,11 +92,30 @@ public class MainActivity extends AppCompatActivity implements ActionMode.Callba
         drawer.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-        // open first fragment
-        Fragment nextFragment = new CurrentIssueFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.replace(R.id.fragment_container, nextFragment).commit();
+        if(url!=null){
+            Pattern p = Pattern.compile("node\\/(\\d+)");
+            Matcher m = p.matcher(url.toString());
+
+            if(m.find()) {
+                Fragment fragment = new ArticleViewFragment();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.add(R.id.fragment_container, fragment);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.commit();
+                getSupportFragmentManager().executePendingTransactions();
+
+                int nodeid = Integer.parseInt(m.group(1));
+                NodeFetcher fetcher = new NodeFetcher(getString(R.string.baseurl) + "/article/" + nodeid);
+                fetcher.execute();
+            }
+
+        }else{
+            // open first fragment
+            Fragment nextFragment = new CurrentIssueFragment();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.replace(R.id.fragment_container, nextFragment).commit();
+        }
     }
 
     @Override public void onStart() {
