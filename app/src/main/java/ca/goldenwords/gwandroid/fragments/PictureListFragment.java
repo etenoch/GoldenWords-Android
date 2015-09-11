@@ -1,13 +1,17 @@
 package ca.goldenwords.gwandroid.fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,10 +31,14 @@ public class PictureListFragment extends Fragment{
     private GridView gridView;
     private GridViewAdapter gridAdapter;
 
+    private ViewPager viewPager;
+    private ImagePagerAdapter imagePagerAdapter;
+    private View viewPagerWrapper;
+
     private View fragmentView;
 
     private HashMap<String,Node> nodeTracker;
-    private ArrayList<ImageItem> list;
+    private ArrayList<ImageItem> imageItems;
     private Section section;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,6 +47,13 @@ public class PictureListFragment extends Fragment{
 
         gridView = (GridView) fragmentView.findViewById(R.id.gridView);
         DataCache.downloaderTasks.add(DataCache.postSectionToBus("pictures"));
+
+        imageItems = new ArrayList<>();
+
+        viewPagerWrapper = fragmentView.findViewById(R.id.view_pager_wrapper);
+        viewPager = (ViewPager) fragmentView.findViewById(R.id.view_pager);
+        imagePagerAdapter = new ImagePagerAdapter();
+        viewPager.setAdapter(imagePagerAdapter);
 
         return fragmentView;
     }
@@ -52,9 +67,8 @@ public class PictureListFragment extends Fragment{
     public void onEvent(Section section){
         this.section = section;
         nodeTracker = new HashMap<>();
-        list = new ArrayList<>();
 
-        gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, list);
+        gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, imageItems);
         gridView.setAdapter(gridAdapter);
 
         for (Node s : section.nodes) {
@@ -68,7 +82,9 @@ public class PictureListFragment extends Fragment{
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override public void onItemClick(AdapterView<?> parent, View v,int position, long id) {
-                EventBus.getDefault().post(new ToastEvent(list.get(position).toString()));
+
+                viewPagerWrapper.setVisibility(View.VISIBLE);
+                EventBus.getDefault().post(new ToastEvent(imageItems.get(position).toString()));
             }
         });
 
@@ -76,10 +92,44 @@ public class PictureListFragment extends Fragment{
 
     public void onEvent(ImageDownloadedEvent image){
         ImageItem ii = new ImageItem(image.getImage(),nodeTracker.get(image.getUrl()).title);
-        list.add(ii);
+        imageItems.add(ii);
+        imagePagerAdapter.notifyDataSetChanged();
         gridAdapter.notifyDataSetChanged();
 
     }
+
+
+    private class ImagePagerAdapter extends PagerAdapter {
+
+
+        @Override
+        public int getCount() {
+            return imageItems.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == ((ImageView) object);
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Context context = getActivity();
+            ImageView imageView = new ImageView(context);
+            int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
+            imageView.setPadding(padding, padding, padding, padding);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            imageView.setImageBitmap(imageItems.get(position).getImage());
+            ((ViewPager) container).addView(imageView, 0);
+            return imageView;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            ((ViewPager) container).removeView((ImageView) object);
+        }
+    }
+
 
 
 }

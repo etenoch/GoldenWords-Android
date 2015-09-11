@@ -36,6 +36,24 @@
         android:layout_below="@+id/volume_issue_header"
         android:clickable="true"/>
 
+    <LinearLayout
+        android:id="@+id/view_pager_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="#99111111"
+        android:visibility="invisible">
+
+        <android.support.v4.view.ViewPager
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />        
+
+    </LinearLayout>
+
+
+
     <ProgressBar
         android:id="@+id/loading_spinner"
         android:layout_width="wrap_content"
