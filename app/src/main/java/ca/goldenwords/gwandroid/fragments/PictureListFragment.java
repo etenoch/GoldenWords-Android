@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.GridViewAdapter;
 import ca.goldenwords.gwandroid.data.DataCache;
 import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
+import ca.goldenwords.gwandroid.events.ToastEvent;
 import ca.goldenwords.gwandroid.model.ImageItem;
 import ca.goldenwords.gwandroid.model.Node;
 import ca.goldenwords.gwandroid.model.Section;
@@ -57,12 +59,19 @@ public class PictureListFragment extends Fragment{
 
         for (Node s : section.nodes) {
             if(s.image_url!=null){
-                nodeTracker.put(s.image_url,s);
+                nodeTracker.put(s.image_url, s);
                 DataCache.downloaderTasks.add(DataCache.postImageToBus(null, s.image_url));
             }
         }
 
         fragmentView.findViewById(R.id.loading_spinner).setVisibility(View.INVISIBLE);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override public void onItemClick(AdapterView<?> parent, View v,int position, long id) {
+                EventBus.getDefault().post(new ToastEvent(list.get(position).toString()));
+            }
+        });
+
     }
 
     public void onEvent(ImageDownloadedEvent image){
