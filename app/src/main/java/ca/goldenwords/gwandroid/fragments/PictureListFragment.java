@@ -37,8 +37,8 @@ public class PictureListFragment extends Fragment{
 
     private View fragmentView;
 
-    private HashMap<String,Node> nodeTracker;
-    private ArrayList<ImageItem> imageItems;
+    private HashMap<String,Node> nodeTracker  = new HashMap<>();
+    private ArrayList<ImageItem> imageItems = new ArrayList<>();
     private Section section;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,8 +47,6 @@ public class PictureListFragment extends Fragment{
 
         gridView = (GridView) fragmentView.findViewById(R.id.gridView);
         DataCache.downloaderTasks.add(DataCache.postSectionToBus("pictures"));
-
-        imageItems = new ArrayList<>();
 
         viewPagerWrapper = fragmentView.findViewById(R.id.view_pager_wrapper);
         viewPager = (ViewPager) fragmentView.findViewById(R.id.view_pager);
@@ -66,7 +64,7 @@ public class PictureListFragment extends Fragment{
 
     public void onEvent(Section section){
         this.section = section;
-        nodeTracker = new HashMap<>();
+//        nodeTracker = new HashMap<>()
 
         gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, imageItems);
         gridView.setAdapter(gridAdapter);
@@ -81,10 +79,17 @@ public class PictureListFragment extends Fragment{
         fragmentView.findViewById(R.id.loading_spinner).setVisibility(View.INVISIBLE);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override public void onItemClick(AdapterView<?> parent, View v,int position, long id) {
+            @Override public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
                 viewPagerWrapper.setVisibility(View.VISIBLE);
                 EventBus.getDefault().post(new ToastEvent(imageItems.get(position).toString()));
+            }
+        });
+
+        viewPagerWrapper.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                viewPagerWrapper.setVisibility(View.INVISIBLE);
+                EventBus.getDefault().post(new ToastEvent("tapped"));
             }
         });
 
@@ -101,19 +106,15 @@ public class PictureListFragment extends Fragment{
 
     private class ImagePagerAdapter extends PagerAdapter {
 
-
-        @Override
-        public int getCount() {
+        @Override public int getCount() {
             return imageItems.size();
         }
 
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
+        @Override public boolean isViewFromObject(View view, Object object) {
             return view == ((ImageView) object);
         }
 
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        @Override public Object instantiateItem(ViewGroup container, int position) {
             Context context = getActivity();
             ImageView imageView = new ImageView(context);
             int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
