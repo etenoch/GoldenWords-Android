@@ -23,11 +23,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import ca.goldenwords.gwandroid.MainActivity;
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.NodeAdapter;
 import ca.goldenwords.gwandroid.data.DataCache;
 import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
-import ca.goldenwords.gwandroid.events.ToastEvent;
 import ca.goldenwords.gwandroid.events.VolumeIssueListEvent;
 import ca.goldenwords.gwandroid.http.GenericFetcher;
 import ca.goldenwords.gwandroid.http.ListFetcher;
@@ -53,6 +53,8 @@ public class CurrentIssueFragment extends Fragment {
 
     public View getPersistentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (fragmentView == null || header == null) {
+            ((MainActivity)getActivity()).setCurrentShareUrl(getString(R.string.siteurl),"Golden Words");
+
             fragmentView = inflater.inflate(R.layout.fragment_current_issue, container, false);
 
             header = (TextView) fragmentView.findViewById(R.id.volume_issue_header);
@@ -183,7 +185,7 @@ public class CurrentIssueFragment extends Fragment {
 
     public void onEvent(ImageDownloadedEvent e){
         ImageView iv = e.getImageView();
-        iv.setImageBitmap(e.getImage());
+        if(iv!=null) iv.setImageBitmap(e.getImage());
     }
 
 

@@ -20,7 +20,6 @@ import ca.goldenwords.gwandroid.MainActivity;
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.data.DataCache;
 import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
-import ca.goldenwords.gwandroid.events.ToastEvent;
 import ca.goldenwords.gwandroid.model.Node;
 import de.greenrobot.event.EventBus;
 
@@ -90,6 +89,9 @@ public class ArticleViewFragment extends Fragment {
         ((TextView) fragmentView.findViewById(R.id.author)).setText(node.author);
         ((TextView) fragmentView.findViewById(R.id.date)).setText("Published on " + ft.format(time));
         ((TextView) fragmentView.findViewById(R.id.section)).setText(node.article_category);
+
+        ((MainActivity)getActivity()).setCurrentShareUrl(getString(R.string.siteurl)+"/node/"+node.nid,node.title);
+
     }
 
     public void onEvent(ImageDownloadedEvent e){

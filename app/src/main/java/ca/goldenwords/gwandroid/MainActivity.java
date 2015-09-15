@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements ActionMode.Callba
     private ActionBarDrawerToggle drawerToggle;
     private Fragment nextFragment;
 
+    private Intent shareIntent;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements ActionMode.Callba
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
@@ -138,6 +142,8 @@ public class MainActivity extends AppCompatActivity implements ActionMode.Callba
         if (id == R.id.action_search) {
             Toast.makeText(getApplicationContext(), "Search", Toast.LENGTH_SHORT).show();
             return true;
+        }else if (id == R.id.action_share){
+            startActivity(Intent.createChooser(shareIntent, "Share link"));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -174,6 +180,13 @@ public class MainActivity extends AppCompatActivity implements ActionMode.Callba
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.replace(R.id.fragment_container, nextFragment).commit();
         this.nextFragment=null;
+    }
+
+    public void setCurrentShareUrl(String currentShareUrl,String text) {
+        shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, text);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, currentShareUrl);
     }
 
     // Event bus events

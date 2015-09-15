@@ -6,12 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.goldenwords.gwandroid.MainActivity;
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.NodeAdapter;
 import ca.goldenwords.gwandroid.data.DataCache;
@@ -60,6 +58,8 @@ public class ArticleListFragment extends Fragment {
 
     public View getPersistentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (fragmentView == null) {
+            ((MainActivity)getActivity()).setCurrentShareUrl(getString(R.string.siteurl),"Golden Words");
+
             fragmentView = inflater.inflate(R.layout.fragment_article_list, container, false);
             section = getArguments().getString("section");
 
