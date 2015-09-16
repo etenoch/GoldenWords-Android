@@ -4,16 +4,17 @@
 
 [Issue Tracker - https://github.com/etenoch/GoldenWords-Android/issues](https://github.com/etenoch/GoldenWords-Android/issues)
 
-<blurb here>
+<img src="https://raw.githubusercontent.com/etenoch/GoldenWords-Android/master/screenshots/gw_frontpage.png?token=AB1KDD58Gt3dIAmwbNHL9-KMuePNimyTks5WAzNNwA%3D%3D" width="200"/>
+<img src="https://raw.githubusercontent.com/etenoch/GoldenWords-Android/master/screenshots/gw_hamburger.png?token=AB1KDP27lIB9z4jWOiwgINNmaKUHBLw0ks5WAzNMwA%3D%3D" width="200"/>
+<img src="https://raw.githubusercontent.com/etenoch/GoldenWords-Android/master/screenshots/gw_map.png?token=AB1KDNXQevIU6IbFV1tnIXH9QVjMq3RYks5WAzNKwA%3D%3D" width="200"/>
+<img src="https://raw.githubusercontent.com/etenoch/GoldenWords-Android/master/screenshots/gw_pictures.png?token=AB1KDDEICgAHgYuGKCqVUf8rgUKmnf5Qks5WAzNLwA%3D%3D" width="200"/>
 
 ## Contributing
-<blurb here>
-
-## Note
-This app was originally developed officially in collaboration with the 2015-2016 Golden Words executive.
+Contributions and pull requests are welcome but I and/or Golden Words exec have final say. If you have an idea or have found a bug, submit a ticket using the [Issue Tracker](https://github.com/etenoch/GoldenWords-Android/issues)
 
 
 ## License
+This app was originally developed officially in collaboration with the 2015-2016 Golden Words executive.
 ```
 Copyright 2015 Enoch Tam
 
