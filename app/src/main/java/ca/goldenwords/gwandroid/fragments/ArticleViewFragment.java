@@ -90,6 +90,15 @@ public class ArticleViewFragment extends Fragment {
         ((TextView) fragmentView.findViewById(R.id.date)).setText("Published on " + ft.format(time));
         ((TextView) fragmentView.findViewById(R.id.section)).setText(node.article_category);
 
+        // display tags
+        String tagString = "";
+        if(node.tags.size()>0) tagString = "Tags: ";
+        for (String tag:node.tags){
+            tagString+=tag+", ";
+        }
+        tagString = tagString.substring(0, tagString.length()-2); // get rid of comma
+        ((TextView) fragmentView.findViewById(R.id.tags)).setText(tagString);
+
         ((MainActivity)getActivity()).setCurrentShareUrl(getString(R.string.siteurl)+"/node/"+node.nid,node.title);
 
     }

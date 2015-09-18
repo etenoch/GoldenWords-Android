@@ -1,7 +1,5 @@
 package ca.goldenwords.gwandroid.model;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,8 +79,7 @@ public class Node {
 
         JSONArray t = jo.getJSONArray("tags");
         node.tags = new ArrayList<>();
-        for (int i = 0; i < t.length(); i++)
-            node.tags.add(t.getString(i));
+        for (int i = 0; i < t.length(); i++) node.tags.add(t.getString(i));
 
         if(addToCache) DataCache.addToCache(node);
         return node;
