@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -87,6 +88,7 @@ public class CurrentIssueFragment extends Fragment {
 
                             for (int j=0;j<vol.getJSONArray("Issues").length();j++) issues.add(vol.getJSONArray("Issues").getInt(j));
 
+                            Collections.reverse(issues);
                             vile.addVolume(vid,issues);
                         }
                     }catch (JSONException e){

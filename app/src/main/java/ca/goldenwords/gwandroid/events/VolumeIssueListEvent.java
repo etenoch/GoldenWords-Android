@@ -2,6 +2,7 @@ package ca.goldenwords.gwandroid.events;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.TreeMap;
 
 public class VolumeIssueListEvent {
@@ -9,7 +10,7 @@ public class VolumeIssueListEvent {
     private TreeMap<Integer,ArrayList<Integer>> volumeIssueListMap;
 
     public VolumeIssueListEvent() {
-        this.volumeIssueListMap = new TreeMap<>();
+        this.volumeIssueListMap = new TreeMap<>(Collections.reverseOrder());
     }
 
     public VolumeIssueListEvent addVolume(int volume,ArrayList<Integer> issues){
