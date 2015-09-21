@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +20,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import ca.goldenwords.gwandroid.MainActivity;
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.GridViewAdapter;
 import ca.goldenwords.gwandroid.data.DataCache;
@@ -46,12 +51,13 @@ public class PictureListFragment extends Fragment{
         fragmentView = inflater.inflate(R.layout.fragment_picture_grid, container, false);
 
         gridView = (GridView) fragmentView.findViewById(R.id.gridView);
-        DataCache.downloaderTasks.add(DataCache.postSectionToBus("pictures"));
 
         viewPagerWrapper = fragmentView.findViewById(R.id.view_pager_wrapper);
         viewPager = (ViewPager) fragmentView.findViewById(R.id.view_pager);
         imagePagerAdapter = new ImagePagerAdapter();
         viewPager.setAdapter(imagePagerAdapter);
+
+        DataCache.downloaderTasks.add(DataCache.postSectionToBus("pictures"));
 
         return fragmentView;
     }
@@ -78,16 +84,69 @@ public class PictureListFragment extends Fragment{
 
         fragmentView.findViewById(R.id.loading_spinner).setVisibility(View.INVISIBLE);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+        fragmentView.setFocusableInTouchMode(true);
+        fragmentView.requestFocus();
 
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 viewPagerWrapper.setVisibility(View.VISIBLE);
-                EventBus.getDefault().post(new ToastEvent(imageItems.get(position).toString()));
+
+                // change action bar. back button
+                final MainActivity ac = (MainActivity) getActivity();
+                final ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+
+                ac.getMDrawerToggle().setDrawerIndicatorEnabled(false);
+                ac.getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                ac.getMDrawerToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewPagerWrapper.setVisibility(View.INVISIBLE);
+
+                        // reset action bar
+                        if (actionBar != null) {
+                            actionBar.setDisplayHomeAsUpEnabled(false);
+                            actionBar.setHomeButtonEnabled(false);
+                        }
+                        ac.getMDrawerToggle().setDrawerIndicatorEnabled(true);
+                        ac.getMDrawerToggle().syncState();
+                        ac.getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    }
+                });
+                if (actionBar != null) {
+                    actionBar.setDisplayHomeAsUpEnabled(true);
+                    actionBar.setHomeButtonEnabled(true);
+                }
+
+                // overide system back button
+                fragmentView.setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        if (keyCode == KeyEvent.KEYCODE_BACK) {
+                            viewPagerWrapper.setVisibility(View.INVISIBLE);
+
+                            // reset action bar
+                            if (actionBar != null) {
+                                actionBar.setDisplayHomeAsUpEnabled(false);
+                                actionBar.setHomeButtonEnabled(false);
+                            }
+                            ac.getMDrawerToggle().setDrawerIndicatorEnabled(true);
+                            ac.getMDrawerToggle().syncState();
+                            ac.getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+                            fragmentView.setOnKeyListener(null);
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+
             }
         });
 
         viewPagerWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 viewPagerWrapper.setVisibility(View.INVISIBLE);
                 EventBus.getDefault().post(new ToastEvent("tapped"));
             }
