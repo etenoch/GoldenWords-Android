@@ -3,10 +3,10 @@ package ca.goldenwords.gwandroid.data;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.support.v4.util.ArrayMap;
 import android.util.LruCache;
 import android.widget.ImageView;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -34,11 +34,11 @@ public class DataCache {
     private static int currentVolume=-1;
     private static int currentIssue=-1;
     private final static HashSet<VolumeIssueKey> fullIssue = new HashSet<>();
-    private final static HashMap<VolumeIssueKey,Set<Integer>> issueVolumeList = new HashMap<>();
-    private final static HashMap<Sections,TreeSet<Node>> sectionCache = new HashMap<>();
-    private final static HashMap<Integer,Node> nodeCache = new HashMap<>();
+    private final static ArrayMap<VolumeIssueKey,Set<Integer>> issueVolumeList = new ArrayMap<>();
+    private final static ArrayMap<Sections,TreeSet<Node>> sectionCache = new ArrayMap<>();
+    private final static ArrayMap<Integer,Node> nodeCache = new ArrayMap<>();
 //    private final static HashMap<String,Bitmap> imageCache = new HashMap<>();
-    public final static LruCache<String,Bitmap> imageCache = new LruCache<>(10);
+    public final static LruCache<String,Bitmap> imageCache = new LruCache<>(12);
 
     public final static Set<AsyncTask> downloaderTasks = new HashSet<>();
 
