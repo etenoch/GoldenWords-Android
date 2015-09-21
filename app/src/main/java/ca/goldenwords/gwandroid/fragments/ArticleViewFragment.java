@@ -80,6 +80,7 @@ public class ArticleViewFragment extends Fragment {
             iv.setImageResource(R.drawable.ic_placeholder);
             DataCache.downloaderTasks.add(DataCache.postImageToBus(iv, node.image_url));
         }else iv.setVisibility(View.GONE);
+
         ((WebView) fragmentView.findViewById(R.id.webView)).loadDataWithBaseURL(null, node.html_content, "text/html", "UTF-8", null);
 
         Date time=new java.util.Date((long)node.revision_timestamp*1000);
@@ -92,14 +93,20 @@ public class ArticleViewFragment extends Fragment {
 
         // display tags
         String tagString = "";
-        if(node.tags.size()>0) tagString = "Tags: ";
-        for (String tag:node.tags){
-            tagString+=tag+", ";
+        if(node.tags.size()>0) {
+            tagString = "Tags: ";
+            for (String tag:node.tags){
+                tagString+=tag+", ";
+            }
+            tagString = tagString.substring(0, tagString.length()-2); // get rid of comma
+            ((TextView) fragmentView.findViewById(R.id.tags)).setText(tagString);
         }
-        tagString = tagString.substring(0, tagString.length()-2); // get rid of comma
-        ((TextView) fragmentView.findViewById(R.id.tags)).setText(tagString);
 
-        ((MainActivity)getActivity()).setCurrentShareUrl(getString(R.string.siteurl)+"/node/"+node.nid,node.title);
+        // volume issue
+        String volumeIssue = node.volume+" - "+node.issue;
+        ((TextView) fragmentView.findViewById(R.id.volume_issue)).setText(volumeIssue);
+
+        ((MainActivity)getActivity()).setCurrentShareUrl(getString(R.string.siteurl) + "/node/" + node.nid, node.title);
 
     }
 
