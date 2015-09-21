@@ -55,6 +55,7 @@ public class ArticleViewFragment extends Fragment {
 
     @Override public void onStop() {
         EventBus.getDefault().unregister(this);
+        ((MainActivity)getActivity()).setCurrentShareUrl(getString(R.string.siteurl), "Golden Words");
         super.onStop();
     }
 
