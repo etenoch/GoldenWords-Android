@@ -13,6 +13,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -44,6 +46,7 @@ public class PictureListFragment extends Fragment{
 
     private HashMap<String,Node> nodeTracker  = new HashMap<>();
     private ArrayList<ImageItem> imageItems = new ArrayList<>();
+    private ArrayList<Node> nodeList = new ArrayList<>();
     private Section section;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,6 +81,7 @@ public class PictureListFragment extends Fragment{
         for (Node s : section.nodes) {
             if(s.image_url!=null){
                 nodeTracker.put(s.image_url, s);
+                nodeList.add(s);
                 DataCache.downloaderTasks.add(DataCache.postImageToBus(null, s.image_url));
             }
         }
@@ -90,7 +94,19 @@ public class PictureListFragment extends Fragment{
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                viewPagerWrapper.setVisibility(View.VISIBLE);
+                viewPager.setCurrentItem(position, false);
+
+                Animation fadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
+                viewPagerWrapper.startAnimation(fadeInAnimation);
+                fadeInAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override public void onAnimationStart(Animation animation) {
+                        viewPagerWrapper.setVisibility(View.VISIBLE);
+                    }
+                    @Override public void onAnimationRepeat(Animation animation) {}
+                    @Override public void onAnimationEnd(Animation animation) {}
+                });
+
+//                viewPagerWrapper.setVisibility(View.VISIBLE);
 
                 // change action bar. back button
                 final MainActivity ac = (MainActivity) getActivity();
@@ -101,7 +117,16 @@ public class PictureListFragment extends Fragment{
                 ac.getMDrawerToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        viewPagerWrapper.setVisibility(View.INVISIBLE);
+                        Animation fadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadeout);
+                        viewPagerWrapper.startAnimation(fadeOutAnimation);
+                        fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
+                            @Override public void onAnimationStart(Animation animation) {
+                                viewPagerWrapper.setVisibility(View.INVISIBLE);
+                            }
+                            @Override public void onAnimationRepeat(Animation animation) {}
+                            @Override public void onAnimationEnd(Animation animation) { }
+                        });
+//                        viewPagerWrapper.setVisibility(View.INVISIBLE);
 
                         // reset action bar
                         if (actionBar != null) {
@@ -123,7 +148,18 @@ public class PictureListFragment extends Fragment{
                     @Override
                     public boolean onKey(View v, int keyCode, KeyEvent event) {
                         if (keyCode == KeyEvent.KEYCODE_BACK) {
-                            viewPagerWrapper.setVisibility(View.INVISIBLE);
+                            Animation fadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadeout);
+                            viewPagerWrapper.startAnimation(fadeOutAnimation);
+                            fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override public void onAnimationStart(Animation animation) {
+                                    viewPagerWrapper.setVisibility(View.INVISIBLE);
+                                }
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {}
+                                @Override
+                                public void onAnimationEnd(Animation animation) {}
+                            });
+//                            viewPagerWrapper.setVisibility(View.INVISIBLE);
 
                             // reset action bar
                             if (actionBar != null) {
@@ -140,6 +176,22 @@ public class PictureListFragment extends Fragment{
                         return false;
                     }
                 });
+
+            }
+        });
+
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override public void onPageSelected(int position) {
+                Node n = nodeList.get(position);
+                int nid=n.nid;
+                ((MainActivity)getActivity()).setCurrentShareUrl(getString(R.string.siteurl) + "/node/" + nid, "Golden Words");
+            }
+
+            @Override public void onPageScrollStateChanged(int state) {
 
             }
         });
