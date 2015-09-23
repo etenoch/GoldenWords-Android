@@ -19,6 +19,9 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -99,11 +102,18 @@ public class PictureListFragment extends Fragment{
                 Animation fadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
                 viewPagerWrapper.startAnimation(fadeInAnimation);
                 fadeInAnimation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override public void onAnimationStart(Animation animation) {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
                         viewPagerWrapper.setVisibility(View.VISIBLE);
                     }
-                    @Override public void onAnimationRepeat(Animation animation) {}
-                    @Override public void onAnimationEnd(Animation animation) {}
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                    }
                 });
 
 
@@ -119,11 +129,18 @@ public class PictureListFragment extends Fragment{
                         Animation fadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadeout);
                         viewPagerWrapper.startAnimation(fadeOutAnimation);
                         fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
-                            @Override public void onAnimationStart(Animation animation) {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
                                 viewPagerWrapper.setVisibility(View.INVISIBLE);
                             }
-                            @Override public void onAnimationRepeat(Animation animation) {}
-                            @Override public void onAnimationEnd(Animation animation) { }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                            }
                         });
 
                         // reset action bar
@@ -149,11 +166,18 @@ public class PictureListFragment extends Fragment{
                             Animation fadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadeout);
                             viewPagerWrapper.startAnimation(fadeOutAnimation);
                             fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
-                                @Override public void onAnimationStart(Animation animation) {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
                                     viewPagerWrapper.setVisibility(View.INVISIBLE);
                                 }
-                                @Override public void onAnimationRepeat(Animation animation) {}
-                                @Override public void onAnimationEnd(Animation animation) {}
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                }
                             });
 
                             // reset action bar
@@ -176,17 +200,20 @@ public class PictureListFragment extends Fragment{
         });
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
 
-            @Override public void onPageSelected(int position) {
+            @Override
+            public void onPageSelected(int position) {
                 Node n = nodeList.get(position);
-                int nid=n.nid;
-                ((MainActivity)getActivity()).setCurrentShareUrl(getString(R.string.siteurl) + "/node/" + nid, "Golden Words");
+                int nid = n.nid;
+                ((MainActivity) getActivity()).setCurrentShareUrl(getString(R.string.siteurl) + "/node/" + nid, "Golden Words");
             }
 
-            @Override public void onPageScrollStateChanged(int state) {
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
             }
         });
@@ -217,23 +244,24 @@ public class PictureListFragment extends Fragment{
         }
 
         @Override public boolean isViewFromObject(View view, Object object) {
-            return view == ((ImageView) object);
+            return view == ((SubsamplingScaleImageView) object);
         }
 
         @Override public Object instantiateItem(ViewGroup container, int position) {
             Context context = getActivity();
-            ImageView imageView = new ImageView(context);
+            SubsamplingScaleImageView imageView = new SubsamplingScaleImageView(context);
             int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
             imageView.setPadding(padding, padding, padding, padding);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            imageView.setImageBitmap(imageItems.get(position).getImage());
+//            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//            imageView.setImageBitmap(imageItems.get(position).getImage());
+            imageView.setImage(ImageSource.bitmap(imageItems.get(position).getImage()));
             ((ViewPager) container).addView(imageView, 0);
             return imageView;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            ((ViewPager) container).removeView((ImageView) object);
+            ((ViewPager) container).removeView((SubsamplingScaleImageView) object);
         }
     }
 
