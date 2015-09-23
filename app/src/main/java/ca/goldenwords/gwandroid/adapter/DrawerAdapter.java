@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ca.goldenwords.gwandroid.R;
-import ca.goldenwords.gwandroid.events.ToastEvent;
 import ca.goldenwords.gwandroid.fragments.AboutUsFragment;
 import ca.goldenwords.gwandroid.fragments.ArticleListFragment;
 import ca.goldenwords.gwandroid.fragments.ContactUsFragment;
 import ca.goldenwords.gwandroid.fragments.CurrentIssueFragment;
 import ca.goldenwords.gwandroid.fragments.IssueArchiveFragment;
 import ca.goldenwords.gwandroid.fragments.LocationsFragment;
-import ca.goldenwords.gwandroid.fragments.PictureListFragment;
+import ca.goldenwords.gwandroid.fragments.PictureGridFragment;
 import ca.goldenwords.gwandroid.fragments.VideoListFragment;
 import de.greenrobot.event.EventBus;
 
@@ -64,7 +62,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                 args.putString("section", section.toString());
                 fragment.setArguments(args);
             }else if(section.toString().equals("pictures"))
-                fragment = new PictureListFragment();
+                fragment = new PictureGridFragment();
             else if(section.toString().equals("videos"))
                 fragment = new VideoListFragment();
             else if(section.toString().equals("locations"))

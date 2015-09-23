@@ -36,7 +36,7 @@ import ca.goldenwords.gwandroid.model.Node;
 import ca.goldenwords.gwandroid.model.Section;
 import de.greenrobot.event.EventBus;
 
-public class PictureListFragment extends Fragment{
+public class PictureGridFragment extends Fragment{
 
     private GridView gridView;
     private GridViewAdapter gridAdapter;
@@ -74,9 +74,8 @@ public class PictureListFragment extends Fragment{
         super.onStop();
     }
 
-    public void onEvent(Section section){
+    public void onEvent(Section section){ // setup everything
         this.section = section;
-//        nodeTracker = new HashMap<>()
 
         gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, imageItems);
         gridView.setAdapter(gridAdapter);
@@ -98,24 +97,7 @@ public class PictureListFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 viewPager.setCurrentItem(position, false);
-
-                Animation fadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
-                viewPagerWrapper.startAnimation(fadeInAnimation);
-                fadeInAnimation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        viewPagerWrapper.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                    }
-                });
-
+                fadeInPagerWrapper();
 
                 // change action bar. back button
                 final MainActivity ac = (MainActivity) getActivity();
@@ -126,22 +108,7 @@ public class PictureListFragment extends Fragment{
                 ac.getMDrawerToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Animation fadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadeout);
-                        viewPagerWrapper.startAnimation(fadeOutAnimation);
-                        fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-                                viewPagerWrapper.setVisibility(View.INVISIBLE);
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                            }
-                        });
+                        fadeOutPagerWrapper();
 
                         // reset action bar
                         if (actionBar != null) {
@@ -163,22 +130,7 @@ public class PictureListFragment extends Fragment{
                     @Override
                     public boolean onKey(View v, int keyCode, KeyEvent event) {
                         if (keyCode == KeyEvent.KEYCODE_BACK) {
-                            Animation fadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadeout);
-                            viewPagerWrapper.startAnimation(fadeOutAnimation);
-                            fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
-                                    viewPagerWrapper.setVisibility(View.INVISIBLE);
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                }
-                            });
+                            fadeOutPagerWrapper();
 
                             // reset action bar
                             if (actionBar != null) {
@@ -202,19 +154,15 @@ public class PictureListFragment extends Fragment{
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
-
             @Override
             public void onPageSelected(int position) {
                 Node n = nodeList.get(position);
                 int nid = n.nid;
-                ((MainActivity) getActivity()).setCurrentShareUrl(getString(R.string.siteurl) + "/node/" + nid, "Golden Words");
+                ((MainActivity) getActivity()).setCurrentShareUrl(getString(R.string.siteurl) + "/node/" + nid, n.title);
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
@@ -236,6 +184,40 @@ public class PictureListFragment extends Fragment{
 
     }
 
+    private void fadeOutPagerWrapper(){
+        Animation fadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadeout);
+        viewPagerWrapper.startAnimation(fadeOutAnimation);
+        fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                viewPagerWrapper.setVisibility(View.INVISIBLE);
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+            }
+        });
+    }
+
+    private void fadeInPagerWrapper(){
+        Animation fadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
+        viewPagerWrapper.startAnimation(fadeInAnimation);
+        fadeInAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                viewPagerWrapper.setVisibility(View.VISIBLE);
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+            }
+        });
+    }
+
 
     private class ImagePagerAdapter extends PagerAdapter {
 
@@ -252,10 +234,8 @@ public class PictureListFragment extends Fragment{
             SubsamplingScaleImageView imageView = new SubsamplingScaleImageView(context);
             int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
             imageView.setPadding(padding, padding, padding, padding);
-//            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-//            imageView.setImageBitmap(imageItems.get(position).getImage());
             imageView.setImage(ImageSource.bitmap(imageItems.get(position).getImage()));
-            ((ViewPager) container).addView(imageView, 0);
+            container.addView(imageView, 0);
             return imageView;
         }
 
@@ -264,7 +244,6 @@ public class PictureListFragment extends Fragment{
             ((ViewPager) container).removeView((SubsamplingScaleImageView) object);
         }
     }
-
 
 
 }
