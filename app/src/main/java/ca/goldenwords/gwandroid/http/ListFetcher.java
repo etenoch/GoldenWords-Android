@@ -34,8 +34,8 @@ public class ListFetcher extends AsyncTaskFetcher {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            EventBus.getDefault().post(new ToastEvent("Oops. The dev fucked up :("));
-            // TODO god dammit Enoch, don't be a lazy fuck and handle this error properly
+            EventBus.getDefault().post(new ToastEvent("An error has occurred :("));
+            // TODO
         }
 
 //        EventBus.getDefault().post(new ToastEvent("No more posts"));

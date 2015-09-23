@@ -24,8 +24,8 @@ public class NodeFetcher extends AsyncTaskFetcher {
             if(!isCancelled()) EventBus.getDefault().post(node);
         }catch(JSONException e){
             e.printStackTrace();
-            EventBus.getDefault().post(new ToastEvent("Oops. The dev fucked up :("));
-            // TODO don't be a lazy fuck and handle this error
+            EventBus.getDefault().post(new ToastEvent("An error has occurred :("));
+            // TODO
         }
     }
 

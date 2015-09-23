@@ -62,7 +62,7 @@ public class ContactUsFragment extends Fragment{
                 dataLoaded=true;
             } catch (JSONException exception) {
                 exception.printStackTrace();
-                EventBus.getDefault().post(new ToastEvent("Oops. The dev fucked up :("));
+                EventBus.getDefault().post(new ToastEvent("An error has occurred :("));
                 // TODO god dammit Enoch, don't be a lazy fuck and handle this error properly
             }
         }

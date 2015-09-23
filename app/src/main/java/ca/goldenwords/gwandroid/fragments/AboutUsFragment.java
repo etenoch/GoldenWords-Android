@@ -13,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ca.goldenwords.gwandroid.R;
-import ca.goldenwords.gwandroid.data.DataCache;
 import ca.goldenwords.gwandroid.events.StringWrapperEvent;
 import ca.goldenwords.gwandroid.events.ToastEvent;
 import ca.goldenwords.gwandroid.http.GenericFetcher;
@@ -61,8 +60,8 @@ public class AboutUsFragment extends Fragment {
                 dataLoaded=true;
             } catch (JSONException exception) {
                 exception.printStackTrace();
-                EventBus.getDefault().post(new ToastEvent("Oops. The dev fucked up :("));
-                // TODO god dammit Enoch, don't be a lazy fuck and handle this error properly
+                EventBus.getDefault().post(new ToastEvent("An error has occurred :("));
+                // TODO god dammit Enoch, don't be a lazy fuck and do something about this error
             }
         }
     }
