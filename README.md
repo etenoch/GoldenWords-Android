@@ -11,6 +11,8 @@ The official Golden Words Android App. Coming to the Play Store soon.
 <img src="https://raw.githubusercontent.com/etenoch/GoldenWords-Android/master/screenshots/gw_map.png?token=AB1KDNXQevIU6IbFV1tnIXH9QVjMq3RYks5WAzNKwA%3D%3D" width="175"/>
 <img src="https://raw.githubusercontent.com/etenoch/GoldenWords-Android/master/screenshots/gw_pictures.png?token=AB1KDDEICgAHgYuGKCqVUf8rgUKmnf5Qks5WAzNLwA%3D%3D" width="175"/>
 
+[iOS Version - https://github.com/LeonardBonfils/GoldenWords-iOS-New](https://github.com/LeonardBonfils/GoldenWords-iOS-New)
+
 ## Contributing
 Contributions and pull requests are welcome but I and/or Golden Words exec have final say. If you have an idea or have found a bug, submit a ticket using the [Issue Tracker](https://github.com/etenoch/GoldenWords-Android/issues)
 
