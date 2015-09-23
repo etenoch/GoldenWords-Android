@@ -106,7 +106,6 @@ public class PictureListFragment extends Fragment{
                     @Override public void onAnimationEnd(Animation animation) {}
                 });
 
-//                viewPagerWrapper.setVisibility(View.VISIBLE);
 
                 // change action bar. back button
                 final MainActivity ac = (MainActivity) getActivity();
@@ -126,7 +125,6 @@ public class PictureListFragment extends Fragment{
                             @Override public void onAnimationRepeat(Animation animation) {}
                             @Override public void onAnimationEnd(Animation animation) { }
                         });
-//                        viewPagerWrapper.setVisibility(View.INVISIBLE);
 
                         // reset action bar
                         if (actionBar != null) {
@@ -154,12 +152,9 @@ public class PictureListFragment extends Fragment{
                                 @Override public void onAnimationStart(Animation animation) {
                                     viewPagerWrapper.setVisibility(View.INVISIBLE);
                                 }
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {}
-                                @Override
-                                public void onAnimationEnd(Animation animation) {}
+                                @Override public void onAnimationRepeat(Animation animation) {}
+                                @Override public void onAnimationEnd(Animation animation) {}
                             });
-//                            viewPagerWrapper.setVisibility(View.INVISIBLE);
 
                             // reset action bar
                             if (actionBar != null) {

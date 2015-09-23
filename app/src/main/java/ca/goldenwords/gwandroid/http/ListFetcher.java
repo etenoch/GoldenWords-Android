@@ -38,6 +38,5 @@ public class ListFetcher extends AsyncTaskFetcher {
             // TODO
         }
 
-//        EventBus.getDefault().post(new ToastEvent("No more posts"));
     }
 }
