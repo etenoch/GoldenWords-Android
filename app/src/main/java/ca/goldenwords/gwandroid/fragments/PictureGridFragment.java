@@ -2,6 +2,7 @@ package ca.goldenwords.gwandroid.fragments;
 
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -17,7 +18,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
 
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
@@ -79,14 +79,6 @@ public class PictureGridFragment extends Fragment{
 
         gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, imageItems);
         gridView.setAdapter(gridAdapter);
-
-        for (Node s : section.nodes) {
-            if(s.image_url!=null){
-                nodeTracker.put(s.image_url, s);
-                nodeList.add(s);
-                DataCache.downloaderTasks.add(DataCache.postImageToBus(null, s.image_url));
-            }
-        }
 
         fragmentView.findViewById(R.id.loading_spinner).setVisibility(View.INVISIBLE);
 
@@ -155,12 +147,14 @@ public class PictureGridFragment extends Fragment{
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
+
             @Override
             public void onPageSelected(int position) {
                 Node n = nodeList.get(position);
                 int nid = n.nid;
                 ((MainActivity) getActivity()).setCurrentShareUrl(getString(R.string.siteurl) + "/node/" + nid, n.title);
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
             }
@@ -174,14 +168,29 @@ public class PictureGridFragment extends Fragment{
             }
         });
 
+        for (Node s : section.nodes) {
+            if(s.image_url!=null){
+                nodeTracker.put(s.image_url, s);
+                nodeList.add(s);
+
+                ImageItem ii = new ImageItem(BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.ic_placeholder_sq),"Downloading",s.nid);
+                imageItems.add(ii);
+
+                DataCache.downloaderTasks.add(DataCache.postImageToBus(null, s.image_url));
+            }
+        }
+
     }
 
     public void onEvent(ImageDownloadedEvent image){
-        ImageItem ii = new ImageItem(image.getImage(),nodeTracker.get(image.getUrl()).title);
-        imageItems.add(ii);
+        for(ImageItem i : imageItems){
+            if(i.nid == nodeTracker.get(image.getUrl()).nid){
+                i.setImage(image.getImage());
+                i.setTitle(nodeTracker.get(image.getUrl()).title);
+            }
+        }
         imagePagerAdapter.notifyDataSetChanged();
         gridAdapter.notifyDataSetChanged();
-
     }
 
     private void fadeOutPagerWrapper(){
