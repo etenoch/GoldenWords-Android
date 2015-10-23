@@ -2,6 +2,7 @@ package ca.goldenwords.gwandroid;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.net.http.HttpResponseCache;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -11,12 +12,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -95,6 +99,16 @@ public class MainActivity extends AppCompatActivity implements ActionMode.Callba
         drawer.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
+        // setup file system httpresponsecache
+        try {
+            File httpCacheDir = new File(getCacheDir(), "http");
+            long httpCacheSize = 30 * 1024 * 1024; // 10 MiB
+            HttpResponseCache.install(httpCacheDir, httpCacheSize);
+        }catch (IOException e) {
+            Log.i("GW Main", "HTTP response cache installation failed:" + e);
+        }
+
+
         if(url!=null){
             Pattern p = Pattern.compile("node\\/(\\d+)");
             Matcher m = p.matcher(url.toString());
@@ -128,6 +142,12 @@ public class MainActivity extends AppCompatActivity implements ActionMode.Callba
 
     @Override public void onStop() {
         EventBus.getDefault().unregister(this);
+
+        HttpResponseCache cache = HttpResponseCache.getInstalled();
+        if (cache != null) {
+            cache.flush();
+        }
+
         super.onStop();
     }
 
