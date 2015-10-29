@@ -159,10 +159,11 @@ public class MainActivity extends AppCompatActivity implements ActionMode.Callba
 
     @Override public boolean onOptionsItemSelected(MenuItem item) { // action bar clicks
         int id = item.getItemId();
-        if (id == R.id.action_search) {
-            Toast.makeText(getApplicationContext(), "Search", Toast.LENGTH_SHORT).show();
-            return true;
-        }else if (id == R.id.action_share){
+//        if (id == R.id.action_search) {
+//            Toast.makeText(getApplicationContext(), "Search", Toast.LENGTH_SHORT).show();
+//            return true;
+//        }else
+        if (id == R.id.action_share){
             startActivity(Intent.createChooser(shareIntent, "Share link"));
         }
         return super.onOptionsItemSelected(item);
