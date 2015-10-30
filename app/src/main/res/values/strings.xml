@@ -1,8 +1,8 @@
 <resources>
     <string name="siteurl">http://goldenwords.ca</string>
     <string name="baseurl">http://goldenwords.ca/api/get</string>
-    <string name="abouturl">http://goldenwords.ca/node/9.json</string>
-    <string name="contactus">http://goldenwords.ca/node/10.json</string>
+    <string name="abouturl">http://goldenwords.ca/contentasjson/node/9</string>
+    <string name="contactus">http://goldenwords.ca/contentasjson/node/10</string>
 
     <string name="vi_list">http://goldenwords.ca/api/get/volume_and_issue_numbers</string>
 

@@ -15,7 +15,18 @@
         android:background="#444444"
         android:textColor="#dddddd"
         android:gravity="center"
+        android:clickable="true"
         android:visibility="invisible"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/volume_issue_header"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_volume_issue"
+        android:scaleType="center"
+        android:scaleX="0.48"
+        android:scaleY="0.48"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cards_list"

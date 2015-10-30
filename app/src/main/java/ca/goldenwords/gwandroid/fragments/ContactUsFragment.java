@@ -57,7 +57,7 @@ public class ContactUsFragment extends Fragment{
                 loading_spinner.setVisibility(View.GONE);
 
                 JSONObject jo = new JSONObject(e.getData());
-                String html = jo.getJSONObject("body").getString("value");
+                String html = jo.getJSONObject("body").getJSONArray("und").getJSONObject(0).getString("value");
                 webview.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null);
                 dataLoaded=true;
             } catch (JSONException exception) {

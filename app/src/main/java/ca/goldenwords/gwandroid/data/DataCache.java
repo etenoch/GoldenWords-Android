@@ -232,7 +232,8 @@ public class DataCache {
 
 
     public static void addToCache(ImageDownloadedEvent image){
-        imageCache.put(image.getUrl(),image.getImage());
+        if(image.getUrl()!=null && image.getImage()!=null)
+            imageCache.put(image.getUrl(),image.getImage());
     }
 
 

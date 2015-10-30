@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements ActionMode.Callba
         // setup file system httpresponsecache
         try {
             File httpCacheDir = new File(getCacheDir(), "http");
-            long httpCacheSize = 30 * 1024 * 1024; // 10 MiB
+            long httpCacheSize = 35 * 1024 * 1024;
             HttpResponseCache.install(httpCacheDir, httpCacheSize);
         }catch (IOException e) {
             Log.i("GW Main", "HTTP response cache installation failed:" + e);
