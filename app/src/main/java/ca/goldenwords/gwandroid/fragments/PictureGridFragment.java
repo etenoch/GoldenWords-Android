@@ -78,8 +78,6 @@ public class PictureGridFragment extends Fragment{
     public void onEvent(Section section){ // setup everything
         this.section = section;
 
-        EventBus.getDefault().post(new ToastEvent("Loading Images"));
-
         gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, imageItems);
         gridView.setAdapter(gridAdapter);
 
@@ -96,6 +94,7 @@ public class PictureGridFragment extends Fragment{
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (imageItems.get(position).nid == -1) { //load more
                     imageItems.remove(position);
+                    EventBus.getDefault().post(new ToastEvent("Loading Images"));
                     DataCache.downloaderTasks.add(DataCache.postSectionToBus("pictures", currentCount + 1));
                 } else {
                     viewPager.setCurrentItem(position, false);
@@ -162,6 +161,7 @@ public class PictureGridFragment extends Fragment{
             public void onPageSelected(int position) {
                 if (imageItems.get(position).nid == -1) {
                     imageItems.remove(position);
+                    EventBus.getDefault().post(new ToastEvent("Loading Images"));
                     DataCache.downloaderTasks.add(DataCache.postSectionToBus("pictures", currentCount + 1));
 
                     fadeOutPagerWrapper();
