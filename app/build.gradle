@@ -40,4 +40,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:7.5.0'
     compile 'com.google.android.gms:play-services-location:7.5.0'
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.2.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

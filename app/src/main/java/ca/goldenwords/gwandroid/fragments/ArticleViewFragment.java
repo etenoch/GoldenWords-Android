@@ -13,13 +13,13 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ca.goldenwords.gwandroid.MainActivity;
 import ca.goldenwords.gwandroid.R;
-import ca.goldenwords.gwandroid.data.DataCache;
-import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
 import ca.goldenwords.gwandroid.model.Node;
 import de.greenrobot.event.EventBus;
 
@@ -39,7 +39,8 @@ public class ArticleViewFragment extends Fragment {
         MainActivity ac = (MainActivity)getActivity();
         ac.getMDrawerToggle().setDrawerIndicatorEnabled(false);
         ac.getMDrawerToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
             }
         });
@@ -78,8 +79,7 @@ public class ArticleViewFragment extends Fragment {
         this.node = node;
         ImageView iv = (ImageView)fragmentView.findViewById(R.id.articleImage);
         if(node.image_url!=null){
-            iv.setImageResource(R.drawable.ic_placeholder);
-            DataCache.downloaderTasks.add(DataCache.postImageToBus(iv, node.image_url));
+            Picasso.with(getActivity()).load(node.image_url).placeholder(R.drawable.ic_placeholder).into(iv);
         }else iv.setVisibility(View.GONE);
 
         ((WebView) fragmentView.findViewById(R.id.webView)).loadDataWithBaseURL(null, node.html_content, "text/html", "UTF-8", null);
@@ -109,11 +109,6 @@ public class ArticleViewFragment extends Fragment {
 
         ((MainActivity)getActivity()).setCurrentShareUrl(getString(R.string.siteurl) + "/node/" + node.nid, node.title);
 
-    }
-
-    public void onEvent(ImageDownloadedEvent e){
-        ImageView iv = e.getImageView();
-        iv.setImageBitmap(e.getImage());
     }
 
 }
