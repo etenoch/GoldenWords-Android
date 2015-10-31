@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -28,7 +27,6 @@ import ca.goldenwords.gwandroid.MainActivity;
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.NodeAdapter;
 import ca.goldenwords.gwandroid.data.DataCache;
-import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
 import ca.goldenwords.gwandroid.events.VolumeIssueListEvent;
 import ca.goldenwords.gwandroid.http.GenericFetcher;
 import ca.goldenwords.gwandroid.http.ListFetcher;
@@ -184,11 +182,5 @@ public class CurrentIssueFragment extends Fragment {
             }
         });
     }
-
-    public void onEvent(ImageDownloadedEvent e){
-        ImageView iv = e.getImageView();
-        if(iv!=null) iv.setImageBitmap(e.getImage());
-    }
-
 
 }

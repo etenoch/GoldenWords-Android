@@ -24,3 +24,5 @@
 -keepclassmembers class * extends de.greenrobot.event.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
+
+-dontwarn com.squareup.okhttp.**

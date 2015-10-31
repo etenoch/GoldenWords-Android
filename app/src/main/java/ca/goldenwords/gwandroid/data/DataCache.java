@@ -1,21 +1,16 @@
 package ca.goldenwords.gwandroid.data;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v4.util.ArrayMap;
-import android.util.LruCache;
-import android.widget.ImageView;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
 import ca.goldenwords.gwandroid.R;
-import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
 import ca.goldenwords.gwandroid.events.ToastEvent;
 import ca.goldenwords.gwandroid.http.GenericFetcher;
-import ca.goldenwords.gwandroid.http.ImageDownloader;
 import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.http.NodeFetcher;
 import ca.goldenwords.gwandroid.model.Issue;
@@ -33,12 +28,10 @@ public class DataCache {
 
     private static int currentVolume=-1;
     private static int currentIssue=-1;
-    private final static HashSet<VolumeIssueKey> fullIssue = new HashSet<>();
-    private final static ArrayMap<VolumeIssueKey,Set<Integer>> issueVolumeList = new ArrayMap<>();
-    private final static ArrayMap<Sections,TreeSet<Node>> sectionCache = new ArrayMap<>();
-    private final static ArrayMap<Integer,Node> nodeCache = new ArrayMap<>();
-//    private final static HashMap<String,Bitmap> imageCache = new HashMap<>();
-    public final static LruCache<String,Bitmap> imageCache = new LruCache<>(12);
+    public final static HashSet<VolumeIssueKey> fullIssue = new HashSet<>();
+    public final static ArrayMap<VolumeIssueKey,Set<Integer>> issueVolumeList = new ArrayMap<>();
+    public final static ArrayMap<Sections,TreeSet<Node>> sectionCache = new ArrayMap<>();
+    public final static ArrayMap<Integer,Node> nodeCache = new ArrayMap<>();
 
     public final static Set<AsyncTask> downloaderTasks = new HashSet<>();
 
@@ -157,22 +150,6 @@ public class DataCache {
         return null;
     }
 
-    // -- Images --
-    public static AsyncTask postImageToBus(ImageView view,String url){
-        Bitmap bmp = imageCache.get(url);
-        if(bmp!=null) {
-            ImageDownloadedEvent ide = new ImageDownloadedEvent(view,bmp,url);
-            EventBus.getDefault().post(ide);
-            return null;
-        }
-        return postImageDownloader(view, url);
-    }
-
-    private static AsyncTask postImageDownloader(ImageView view,String url){
-        if(GWUtils.hasInternet()) return new ImageDownloader(view,url).execute();
-        else EventBus.getDefault().post(new ToastEvent("No Internet Connection"));
-        return null;
-    }
 
     // -- Locations --
     public static AsyncTask postLocations(){
@@ -230,11 +207,6 @@ public class DataCache {
         }
     }
 
-
-    public static void addToCache(ImageDownloadedEvent image){
-        if(image.getUrl()!=null && image.getImage()!=null)
-            imageCache.put(image.getUrl(),image.getImage());
-    }
 
 
     //==================//

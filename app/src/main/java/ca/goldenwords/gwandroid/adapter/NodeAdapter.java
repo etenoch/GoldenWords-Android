@@ -9,8 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,10 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import ca.goldenwords.gwandroid.R;
-import ca.goldenwords.gwandroid.data.DataCache;
+import ca.goldenwords.gwandroid.fragments.ArticleViewFragment;
 import ca.goldenwords.gwandroid.http.ListFetcher;
 import ca.goldenwords.gwandroid.model.Node;
-import ca.goldenwords.gwandroid.fragments.ArticleViewFragment;
 import de.greenrobot.event.EventBus;
 
 public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder>{
@@ -55,7 +55,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
         if(n.cover_image==1){
             viewHolder.cover_image.setVisibility(View.VISIBLE);
             viewHolder.cover_image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            DataCache.downloaderTasks.add(DataCache.postImageToBus(viewHolder.cover_image, n.image_url));
+            Picasso.with(context).load(n.image_url).placeholder(R.drawable.ic_placeholder).into(viewHolder.cover_image);
         }else viewHolder.cover_image.setVisibility(View.GONE);
 
         viewHolder.card_headline.setText(n.title);
