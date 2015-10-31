@@ -79,7 +79,7 @@ public class ArticleViewFragment extends Fragment {
         this.node = node;
         ImageView iv = (ImageView)fragmentView.findViewById(R.id.articleImage);
         if(node.image_url!=null){
-            Picasso.with(getActivity()).load(node.image_url).placeholder(R.drawable.ic_placeholder).into(iv);
+            Picasso.with(getActivity()).load(node.image_url).resize(970,970).centerInside().placeholder(R.drawable.ic_placeholder).into(iv);
         }else iv.setVisibility(View.GONE);
 
         ((WebView) fragmentView.findViewById(R.id.webView)).loadDataWithBaseURL(null, node.html_content, "text/html", "UTF-8", null);

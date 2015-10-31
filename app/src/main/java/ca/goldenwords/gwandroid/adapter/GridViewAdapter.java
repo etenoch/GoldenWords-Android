@@ -44,23 +44,12 @@ public class GridViewAdapter extends ArrayAdapter {
 
         ImageItem item = data.get(position);
 
-//        final int maxSize = 450;
-//        int outWidth;
-//        int outHeight;
-//        int inWidth = item.getImage().getWidth();
-//        int inHeight = item.getImage().getHeight();
-//        if(inWidth > inHeight){
-//            outWidth = maxSize;
-//            outHeight = (inHeight * maxSize) / inWidth;
-//        } else {
-//            outHeight = maxSize;
-//            outWidth = (inWidth * maxSize) / inHeight;
-//        }
-//
-//        holder.image.setImageBitmap(Bitmap.createScaledBitmap(item.getImage(), outWidth, outHeight, false));
-
-        Picasso.with(context).load(DataCache.nodeCache.get(item.nid).image_url).resize(260,260).centerCrop().placeholder(R.drawable.ic_placeholder_sq).into(holder.image);
-
+        if(item.nid==-1){ // load more
+            holder.image.setImageResource(R.drawable.ic_loadmore_sq);
+        }else{
+            String url = DataCache.nodeCache.get(item.nid).image_url;
+            Picasso.with(context).load(url).resize(260,260).centerCrop().placeholder(R.drawable.ic_placeholder_sq).into(holder.image);
+        }
 
         return row;
     }

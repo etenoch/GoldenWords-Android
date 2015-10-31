@@ -51,6 +51,8 @@ public class PictureGridFragment extends Fragment{
     private ArrayList<Node> nodeList = new ArrayList<>();
     private Section section;
 
+    private int currentCount=0;
+
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         EventBus.getDefault().register(this);
         fragmentView = inflater.inflate(R.layout.fragment_picture_grid, container, false);
@@ -76,6 +78,8 @@ public class PictureGridFragment extends Fragment{
     public void onEvent(Section section){ // setup everything
         this.section = section;
 
+        EventBus.getDefault().post(new ToastEvent("Loading Images"));
+
         gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, imageItems);
         gridView.setAdapter(gridAdapter);
 
@@ -84,43 +88,26 @@ public class PictureGridFragment extends Fragment{
         fragmentView.setFocusableInTouchMode(true);
         fragmentView.requestFocus();
 
+        final MainActivity ac = (MainActivity) getActivity();
+        final ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                viewPager.setCurrentItem(position, false);
-                fadeInPagerWrapper();
+                if (imageItems.get(position).nid == -1) { //load more
+                    imageItems.remove(position);
+                    DataCache.downloaderTasks.add(DataCache.postSectionToBus("pictures", currentCount + 1));
+                } else {
+                    viewPager.setCurrentItem(position, false);
+                    fadeInPagerWrapper();
 
-                // change action bar. back button
-                final MainActivity ac = (MainActivity) getActivity();
-                final ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+                    // change action bar. back button
 
-                ac.getMDrawerToggle().setDrawerIndicatorEnabled(false);
-                ac.getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                ac.getMDrawerToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        fadeOutPagerWrapper();
-
-                        // reset action bar
-                        if (actionBar != null) {
-                            actionBar.setDisplayHomeAsUpEnabled(false);
-                            actionBar.setHomeButtonEnabled(false);
-                        }
-                        ac.getMDrawerToggle().setDrawerIndicatorEnabled(true);
-                        ac.getMDrawerToggle().syncState();
-                        ac.getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                    }
-                });
-                if (actionBar != null) {
-                    actionBar.setDisplayHomeAsUpEnabled(true);
-                    actionBar.setHomeButtonEnabled(true);
-                }
-
-                // overide system back button
-                fragmentView.setOnKeyListener(new View.OnKeyListener() {
-                    @Override
-                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-                        if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    ac.getMDrawerToggle().setDrawerIndicatorEnabled(false);
+                    ac.getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                    ac.getMDrawerToggle().setToolbarNavigationClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
                             fadeOutPagerWrapper();
 
                             // reset action bar
@@ -131,16 +118,40 @@ public class PictureGridFragment extends Fragment{
                             ac.getMDrawerToggle().setDrawerIndicatorEnabled(true);
                             ac.getMDrawerToggle().syncState();
                             ac.getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-
-                            fragmentView.setOnKeyListener(null);
-                            return true;
                         }
-                        return false;
+                    });
+                    if (actionBar != null) {
+                        actionBar.setDisplayHomeAsUpEnabled(true);
+                        actionBar.setHomeButtonEnabled(true);
                     }
-                });
 
-            }
-        });
+                    // overide system back button
+                    fragmentView.setOnKeyListener(new View.OnKeyListener() {
+                        @Override
+                        public boolean onKey(View v, int keyCode, KeyEvent event) {
+                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                fadeOutPagerWrapper();
+
+                                // reset action bar
+                                if (actionBar != null) {
+                                    actionBar.setDisplayHomeAsUpEnabled(false);
+                                    actionBar.setHomeButtonEnabled(false);
+                                }
+                                ac.getMDrawerToggle().setDrawerIndicatorEnabled(true);
+                                ac.getMDrawerToggle().syncState();
+                                ac.getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+                                fragmentView.setOnKeyListener(null);
+                                return true;
+                            }
+                            return false;
+                        }
+                    });
+
+                } // end else
+
+            } // end onitemclick
+        }); //  grid view setonclicklistner
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -149,9 +160,30 @@ public class PictureGridFragment extends Fragment{
 
             @Override
             public void onPageSelected(int position) {
-                Node n = nodeList.get(position);
-                int nid = n.nid;
-                ((MainActivity) getActivity()).setCurrentShareUrl(getString(R.string.siteurl) + "/node/" + nid, n.title);
+                if (imageItems.get(position).nid == -1) {
+                    imageItems.remove(position);
+                    DataCache.downloaderTasks.add(DataCache.postSectionToBus("pictures", currentCount + 1));
+
+                    fadeOutPagerWrapper();
+                    // reset action bar
+                    if (actionBar != null) {
+                        actionBar.setDisplayHomeAsUpEnabled(false);
+                        actionBar.setHomeButtonEnabled(false);
+                    }
+                    ac.getMDrawerToggle().setDrawerIndicatorEnabled(true);
+                    ac.getMDrawerToggle().syncState();
+                    ac.getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+                    fragmentView.setOnKeyListener(null);
+                }
+
+                if (position < nodeList.size()) {
+                    Node n = nodeList.get(position);
+                    if (n != null) {
+                        int nid = n.nid;
+                        ((MainActivity) getActivity()).setCurrentShareUrl(getString(R.string.siteurl) + "/node/" + nid, n.title);
+                    }
+                }
             }
 
             @Override
@@ -167,14 +199,22 @@ public class PictureGridFragment extends Fragment{
             }
         });
 
+        ImageItem ii;
         for (Node s : section.nodes) {
             if(s.image_url!=null){
                 nodeTracker.put(s.image_url, s);
                 nodeList.add(s);
-                ImageItem ii = new ImageItem(BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.ic_placeholder_sq),"Downloading",s.nid);
+                currentCount++;
+                ii = new ImageItem(BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.ic_placeholder_sq),"Downloading",s.nid);
                 imageItems.add(ii);
             }
         }
+
+        ii = new ImageItem(BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.ic_loadmore_sq),"Load More",-1);
+        imageItems.add(ii);
+
+        gridView.smoothScrollToPosition(imageItems.size() - 1);
+
         imagePagerAdapter.notifyDataSetChanged();
         gridAdapter.notifyDataSetChanged();
 
@@ -206,9 +246,11 @@ public class PictureGridFragment extends Fragment{
             public void onAnimationStart(Animation animation) {
                 viewPagerWrapper.setVisibility(View.VISIBLE);
             }
+
             @Override
             public void onAnimationRepeat(Animation animation) {
             }
+
             @Override
             public void onAnimationEnd(Animation animation) {
             }
@@ -231,7 +273,18 @@ public class PictureGridFragment extends Fragment{
             PhotoView imageView = new PhotoView(context);
             int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
             imageView.setPadding(padding, padding, padding, padding);
-            Picasso.with(context).load(DataCache.nodeCache.get(imageItems.get(position).nid).image_url).placeholder(R.drawable.ic_placeholder_sq).into(imageView);
+
+            if(imageItems.get(position).nid==-1) {
+//                imageView.setImageResource(R.drawable.ic_placeholder_sq);
+            }
+            else Picasso.with(context)
+                    .load(DataCache.nodeCache.get(imageItems.get(position).nid).image_url)
+                    .resize(900,900)
+                    .centerInside()
+                    .placeholder(R.drawable.ic_placeholder_sq)
+                    .into(imageView);
+
+
             container.addView(imageView, 0);
             return imageView;
         }
