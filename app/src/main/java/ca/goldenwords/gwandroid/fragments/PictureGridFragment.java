@@ -171,11 +171,8 @@ public class PictureGridFragment extends Fragment{
             if(s.image_url!=null){
                 nodeTracker.put(s.image_url, s);
                 nodeList.add(s);
-
                 ImageItem ii = new ImageItem(BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.ic_placeholder_sq),"Downloading",s.nid);
                 imageItems.add(ii);
-
-//                DataCache.downloaderTasks.add(DataCache.postImageToBus(null, s.image_url));
             }
         }
         imagePagerAdapter.notifyDataSetChanged();
@@ -183,16 +180,6 @@ public class PictureGridFragment extends Fragment{
 
     }
 
-//    public void onEvent(ImageDownloadedEvent image){
-//        for(ImageItem i : imageItems){
-//            if(i.nid == nodeTracker.get(image.getUrl()).nid){
-//                i.setImage(image.getImage());
-//                i.setTitle(nodeTracker.get(image.getUrl()).title);
-//            }
-//        }
-//        imagePagerAdapter.notifyDataSetChanged();
-//        gridAdapter.notifyDataSetChanged();
-//    }
 
     private void fadeOutPagerWrapper(){
         Animation fadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadeout);
@@ -244,11 +231,7 @@ public class PictureGridFragment extends Fragment{
             PhotoView imageView = new PhotoView(context);
             int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
             imageView.setPadding(padding, padding, padding, padding);
-//            imageView.setImage(ImageSource.bitmap(imageItems.get(position).getImage()));
-
             Picasso.with(context).load(DataCache.nodeCache.get(imageItems.get(position).nid).image_url).placeholder(R.drawable.ic_placeholder_sq).into(imageView);
-
-
             container.addView(imageView, 0);
             return imageView;
         }
