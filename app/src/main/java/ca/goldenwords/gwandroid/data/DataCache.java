@@ -33,10 +33,10 @@ public class DataCache {
 
     private static int currentVolume=-1;
     private static int currentIssue=-1;
-    private final static HashSet<VolumeIssueKey> fullIssue = new HashSet<>();
-    private final static ArrayMap<VolumeIssueKey,Set<Integer>> issueVolumeList = new ArrayMap<>();
-    private final static ArrayMap<Sections,TreeSet<Node>> sectionCache = new ArrayMap<>();
-    private final static ArrayMap<Integer,Node> nodeCache = new ArrayMap<>();
+    public final static HashSet<VolumeIssueKey> fullIssue = new HashSet<>();
+    public final static ArrayMap<VolumeIssueKey,Set<Integer>> issueVolumeList = new ArrayMap<>();
+    public final static ArrayMap<Sections,TreeSet<Node>> sectionCache = new ArrayMap<>();
+    public final static ArrayMap<Integer,Node> nodeCache = new ArrayMap<>();
 //    private final static HashMap<String,Bitmap> imageCache = new HashMap<>();
     public final static LruCache<String,Bitmap> imageCache = new LruCache<>(12);
 

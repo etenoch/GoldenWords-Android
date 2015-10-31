@@ -3,17 +3,18 @@ package ca.goldenwords.gwandroid.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import ca.goldenwords.gwandroid.R;
+import ca.goldenwords.gwandroid.data.DataCache;
 import ca.goldenwords.gwandroid.model.ImageItem;
 
 public class GridViewAdapter extends ArrayAdapter {
@@ -43,24 +44,28 @@ public class GridViewAdapter extends ArrayAdapter {
 
         ImageItem item = data.get(position);
 
-        final int maxSize = 450;
-        int outWidth;
-        int outHeight;
-        int inWidth = item.getImage().getWidth();
-        int inHeight = item.getImage().getHeight();
-        if(inWidth > inHeight){
-            outWidth = maxSize;
-            outHeight = (inHeight * maxSize) / inWidth;
-        } else {
-            outHeight = maxSize;
-            outWidth = (inWidth * maxSize) / inHeight;
-        }
+//        final int maxSize = 450;
+//        int outWidth;
+//        int outHeight;
+//        int inWidth = item.getImage().getWidth();
+//        int inHeight = item.getImage().getHeight();
+//        if(inWidth > inHeight){
+//            outWidth = maxSize;
+//            outHeight = (inHeight * maxSize) / inWidth;
+//        } else {
+//            outHeight = maxSize;
+//            outWidth = (inWidth * maxSize) / inHeight;
+//        }
+//
+//        holder.image.setImageBitmap(Bitmap.createScaledBitmap(item.getImage(), outWidth, outHeight, false));
 
-        holder.image.setImageBitmap(Bitmap.createScaledBitmap(item.getImage(), outWidth, outHeight, false));
+        Picasso.with(context).load(DataCache.nodeCache.get(item.nid).image_url).resize(260,260).centerCrop().placeholder(R.drawable.ic_placeholder_sq).into(holder.image);
+
+
         return row;
     }
 
     static class ViewHolder {
-        ImageView image;
+        public ImageView image;
     }
 }

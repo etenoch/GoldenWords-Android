@@ -19,8 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,12 +28,12 @@ import ca.goldenwords.gwandroid.MainActivity;
 import ca.goldenwords.gwandroid.R;
 import ca.goldenwords.gwandroid.adapter.GridViewAdapter;
 import ca.goldenwords.gwandroid.data.DataCache;
-import ca.goldenwords.gwandroid.events.ImageDownloadedEvent;
 import ca.goldenwords.gwandroid.events.ToastEvent;
 import ca.goldenwords.gwandroid.model.ImageItem;
 import ca.goldenwords.gwandroid.model.Node;
 import ca.goldenwords.gwandroid.model.Section;
 import de.greenrobot.event.EventBus;
+import uk.co.senab.photoview.PhotoView;
 
 public class PictureGridFragment extends Fragment{
 
@@ -176,22 +175,24 @@ public class PictureGridFragment extends Fragment{
                 ImageItem ii = new ImageItem(BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.ic_placeholder_sq),"Downloading",s.nid);
                 imageItems.add(ii);
 
-                DataCache.downloaderTasks.add(DataCache.postImageToBus(null, s.image_url));
-            }
-        }
-
-    }
-
-    public void onEvent(ImageDownloadedEvent image){
-        for(ImageItem i : imageItems){
-            if(i.nid == nodeTracker.get(image.getUrl()).nid){
-                i.setImage(image.getImage());
-                i.setTitle(nodeTracker.get(image.getUrl()).title);
+//                DataCache.downloaderTasks.add(DataCache.postImageToBus(null, s.image_url));
             }
         }
         imagePagerAdapter.notifyDataSetChanged();
         gridAdapter.notifyDataSetChanged();
+
     }
+
+//    public void onEvent(ImageDownloadedEvent image){
+//        for(ImageItem i : imageItems){
+//            if(i.nid == nodeTracker.get(image.getUrl()).nid){
+//                i.setImage(image.getImage());
+//                i.setTitle(nodeTracker.get(image.getUrl()).title);
+//            }
+//        }
+//        imagePagerAdapter.notifyDataSetChanged();
+//        gridAdapter.notifyDataSetChanged();
+//    }
 
     private void fadeOutPagerWrapper(){
         Animation fadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadeout);
@@ -235,22 +236,26 @@ public class PictureGridFragment extends Fragment{
         }
 
         @Override public boolean isViewFromObject(View view, Object object) {
-            return view == ((SubsamplingScaleImageView) object);
+            return view == ((PhotoView) object);
         }
 
         @Override public Object instantiateItem(ViewGroup container, int position) {
             Context context = getActivity();
-            SubsamplingScaleImageView imageView = new SubsamplingScaleImageView(context);
+            PhotoView imageView = new PhotoView(context);
             int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
             imageView.setPadding(padding, padding, padding, padding);
-            imageView.setImage(ImageSource.bitmap(imageItems.get(position).getImage()));
+//            imageView.setImage(ImageSource.bitmap(imageItems.get(position).getImage()));
+
+            Picasso.with(context).load(DataCache.nodeCache.get(imageItems.get(position).nid).image_url).placeholder(R.drawable.ic_placeholder_sq).into(imageView);
+
+
             container.addView(imageView, 0);
             return imageView;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            ((ViewPager) container).removeView((SubsamplingScaleImageView) object);
+            ((ViewPager) container).removeView((PhotoView) object);
         }
     }
 
