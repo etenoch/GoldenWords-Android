@@ -1,6 +1,6 @@
 # Golden Words - Android App &nbsp;
 
-The official [Golden Words Android App](http://www.goldenwords.ca/app). Coming to the Play Store soon.
+The official [Golden Words Android App](http://www.goldenwords.ca/app). On the [Play Store now](https://play.google.com/store/apps/details?id=ca.goldenwords.gwandroid).
 
 <a href='https://circleci.com/gh/etenoch/GoldenWords-Android' target='_blank'><img src='https://circleci.com/gh/etenoch/GoldenWords-Android.svg?style=svg&circle-token=7222f7d9b52289bdcd8eb7cf9db00d7835af1034' width="75"/></a> 
 
